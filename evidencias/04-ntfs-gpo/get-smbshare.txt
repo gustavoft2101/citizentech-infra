@@ -1,0 +1,45 @@
+﻿==== Get-SmbShare e permissões ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:01
+Comando  : Get-SmbShare | Format-Table Name, Path, ScopeName, Description -AutoSize
+    Get-SmbShareAccess -Name $Config.Compartilhamento | Format-Table Name, AccountName, AccessControlType, AccessRight -AutoSize
+    "NTFS de $($Config.PastaShare):"
+    (Get-Acl $Config.PastaShare).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType, IsInherited -AutoSize
+    "Teste local do caminho de rede: Test-Path $caminhoUNC = $(Test-Path $caminhoUNC)"
+----------------------------------------------------------------------
+
+Name           Path                                               ScopeName Description                                           
+----           ----                                               --------- -----------                                           
+ADMIN$         C:\Windows                                         *         Remote Admin                                          
+C$             C:\                                                *         Default share                                         
+CitizenTech    C:\Shares\CitizenTech                              *         Documentos da operacao AlertaEncosta (dados simulados)
+CitizenTechDFS C:\DFSRoots\CitizenTechDFS                         *                                                               
+IPC$                                                              *         Remote IPC                                            
+NETLOGON       C:\Windows\SYSVOL\sysvol\citizentech.local\SCRIPTS *         Logon server share                                    
+SYSVOL         C:\Windows\SYSVOL\sysvol                           *         Logon server share                                    
+
+
+
+Name        AccountName                       AccessControlType AccessRight
+----        -----------                       ----------------- -----------
+CitizenTech CITIZENTECH\GG_CitizenTech_Admins             Allow        Full
+CitizenTech BUILTIN\Administrators                        Allow        Full
+CitizenTech CITIZENTECH\Domain Users                      Allow        Read
+
+
+NTFS de C:\Shares\CitizenTech:
+
+IdentityReference                            FileSystemRights AccessControlType IsInherited
+-----------------                            ---------------- ----------------- -----------
+CITIZENTECH\Domain Users          ReadAndExecute, Synchronize             Allow       False
+CITIZENTECH\GG_CitizenTech_Admins         Modify, Synchronize             Allow       False
+NT AUTHORITY\SYSTEM                               FullControl             Allow        True
+BUILTIN\Administrators                            FullControl             Allow        True
+BUILTIN\Users                     ReadAndExecute, Synchronize             Allow        True
+BUILTIN\Users                                      AppendData             Allow        True
+BUILTIN\Users                                     CreateFiles             Allow        True
+CREATOR OWNER                                       268435456             Allow        True
+
+
+Teste local do caminho de rede: Test-Path \\SRV-CITIZENTECH\CitizenTech = True
+

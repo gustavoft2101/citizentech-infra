@@ -1,0 +1,26 @@
+﻿==== Permitir logon local no servidor (remover operadores) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 16:22:20
+Comando  : secedit /export /areas USER_RIGHTS /cfg $arquivoDireitos | Out-Null
+    $linha = Select-String -Path $arquivoDireitos -Pattern '^SeInteractiveLogonRight' | Select-Object -First 1
+    ($linha.Line -split '=', 2)[1].Split(',') | ForEach-Object {
+        $item = $_.Trim()
+        $nome = $item
+        if ($item.StartsWith('*')) {
+            try { $nome = Get-NomeConta $item.TrimStart('*') } catch { $nome = $item }
+        }
+        [pscustomobject]@{ Conta = $nome; Identificador = $item }
+    } | Format-Table -AutoSize
+----------------------------------------------------------------------
+
+Conta                                      Identificador
+-----                                      -------------
+BUILTIN\Administrators                     *S-1-5-32-544
+BUILTIN\Account Operators                  *S-1-5-32-548
+BUILTIN\Server Operators                   *S-1-5-32-549
+BUILTIN\Print Operators                    *S-1-5-32-550
+BUILTIN\Backup Operators                   *S-1-5-32-551
+NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS *S-1-5-9     
+
+
+

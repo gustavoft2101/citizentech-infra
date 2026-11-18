@@ -1,0 +1,36 @@
+﻿==== Get-DfsnRoot ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:11
+Comando  : Get-DfsnRoot | Format-Table Path, Type, State, Description -AutoSize
+    Get-DfsnFolder -Path "$raizDfs\*" | Format-Table Path, State -AutoSize
+    Get-DfsnFolderTarget -Path $pastaDfs | Format-Table Path, TargetPath, State -AutoSize
+    "Conteúdo via DFS ($pastaDfs):"
+    Get-ChildItem $pastaDfs | Format-Table Name, Length, LastWriteTime -AutoSize
+----------------------------------------------------------------------
+
+Path                               Type      State  Description
+----                               ----      -----  -----------
+\\citizentech.local\CitizenTechDFS Domain V2 Online            
+
+
+
+Path                                          State 
+----                                          ----- 
+\\citizentech.local\CitizenTechDFS\Documentos Online
+
+
+
+Path                                          TargetPath                    State 
+----                                          ----------                    ----- 
+\\citizentech.local\CitizenTechDFS\Documentos \\SRV-CITIZENTECH\CitizenTech Online
+
+
+Conteúdo via DFS (\\citizentech.local\CitizenTechDFS\Documentos):
+
+Name                                       Length LastWriteTime      
+----                                       ------ -------------      
+LEIA-ME-plano-de-contingencia-SIMULADO.txt    217 18/11/2026 11:47:41
+teste-auditoria.txt                            93 18/11/2026 12:02:58
+
+
+

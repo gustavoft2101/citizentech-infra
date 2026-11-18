@@ -1,0 +1,29 @@
+﻿==== Get-GPO -All e vínculo na OU ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:04
+Comando  : Get-GPO -All | Format-Table DisplayName, GpoStatus, CreationTime, ModificationTime -AutoSize
+    (Get-GPInheritance -Target $CaminhoOU).GpoLinks | Format-Table DisplayName, Enabled, Enforced, Target -AutoSize
+    Get-GPRegistryValue -Name $Config.Gpo -Key 'HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer' |
+        Format-Table ValueName, Type, Value, PolicyState -AutoSize
+----------------------------------------------------------------------
+
+DisplayName                                GpoStatus CreationTime        ModificationTime   
+-----------                                --------- ------------        ----------------   
+GPO_CitizenTech_Usuarios          AllSettingsEnabled 18/11/2026 11:47:42 18/11/2026 12:15:02
+Default Domain Policy             AllSettingsEnabled 18/11/2026 11:12:05 18/11/2026 11:17:28
+Default Domain Controllers Policy AllSettingsEnabled 18/11/2026 11:12:05 18/11/2026 11:50:18
+
+
+
+DisplayName              Enabled Enforced Target                                
+-----------              ------- -------- ------                                
+GPO_CitizenTech_Usuarios    True    False ou=citizentech,dc=citizentech,dc=local
+
+
+
+ValueName       Type Value PolicyState
+---------       ---- ----- -----------
+NoControlPanel DWord     1         Set
+
+
+

@@ -1,0 +1,42 @@
+﻿==== Configuração do RDP ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:08
+Comando  : Get-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' |
+        Format-List fDenyTSConnections
+    Get-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' |
+        Format-List UserAuthentication, PortNumber
+    Get-NetFirewallRule -Group '@FirewallAPI.dll,-28752' | Format-Table DisplayName, Enabled, Direction, Action -AutoSize
+    Test-NetConnection -ComputerName $FQDNServidor -Port 3389 |
+        Format-List ComputerName, RemoteAddress, RemotePort, TcpTestSucceeded
+----------------------------------------------------------------------
+
+
+fDenyTSConnections : 0
+
+
+
+
+
+UserAuthentication : 1
+PortNumber         : 3389
+
+
+
+
+DisplayName                         Enabled Direction Action
+-----------                         ------- --------- ------
+Remote Desktop - Shadow (TCP-In)       True   Inbound  Allow
+Remote Desktop - User Mode (TCP-In)    True   Inbound  Allow
+Remote Desktop - User Mode (UDP-In)    True   Inbound  Allow
+
+
+
+
+ComputerName     : srv-citizentech.citizentech.local
+RemoteAddress    : fe80::4c07:ec21:4429:d9ed%6
+RemotePort       : 3389
+TcpTestSucceeded : True
+
+
+
+
