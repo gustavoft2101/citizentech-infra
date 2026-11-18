@@ -100,12 +100,14 @@ Write-Ok 'Porta 80 liberada no firewall.'
 
 # ---------------------------------------------------------------- 4.4 NTFS
 Write-Passo "4.4 Permissões NTFS em $($Config.PastaSite)"
-# GetAccessControl('Access') lê só a lista de permissões (evita erro de "proprietário" no Set-Acl).
-$acl = (Get-Item $Config.PastaSite).GetAccessControl('Access')
+# GetAccessControl('Access') + SetAccessControl lê e grava só a lista de permissões (DACL):
+# não mexe no proprietário nem nas regras de auditoria (SACL) do script 06.
+$pastaSite = Get-Item $Config.PastaSite
+$acl = $pastaSite.GetAccessControl('Access')
 $acl.SetAccessRule((New-RegraNtfs -Conta 'S-1-5-32-568' -Direitos 'ReadAndExecute'))                         # IIS_IUSRS (identidade do pool)
 $acl.SetAccessRule((New-RegraNtfs -Conta 'S-1-5-17'     -Direitos 'ReadAndExecute'))                         # IUSR (acesso anônimo)
 $acl.SetAccessRule((New-RegraNtfs -Conta "$($Config.NetBIOS)\$($Config.GrupoAdmins)" -Direitos 'Modify'))    # equipe que publica o site
-Set-Acl -Path $Config.PastaSite -AclObject $acl
+$pastaSite.SetAccessControl($acl)
 Write-Ok 'IIS_IUSRS e IUSR: leitura e execução | GG_CitizenTech_Admins: alteração'
 
 Invoke-Evidencia -Titulo 'Get-Acl da pasta do site' -Arquivo '03-iis\get-acl.txt' -Comando {

@@ -21,7 +21,7 @@ Import-Module WebAdministration, ActiveDirectory, GroupPolicy
 Invoke-Evidencia -Titulo '=== FICHA DA INFRAESTRUTURA ===' -Arquivo '08-validacao-final\ficha-infraestrutura.txt' -Comando {
     hostname
     ipconfig /all
-    nslookup $FQDNServidor
+    nslookup $FQDNServidor $Config.IP
     Test-NetConnection -ComputerName $FQDNServidor -Port 80 |
         Format-List ComputerName, RemoteAddress, RemotePort, TcpTestSucceeded
     Get-ADDomain | Format-Table Name, DNSRoot, NetBIOSName -AutoSize

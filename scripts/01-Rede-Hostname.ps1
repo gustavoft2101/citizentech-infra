@@ -44,8 +44,14 @@ Write-Ok "Interface escolhida: '$($adaptador.Name)' (ifIndex $indice)"
 
 Write-Host ''
 Write-Host 'Configuração atual (antes do IP fixo). Use estes dados para conferir o 00-Config.ps1:' -ForegroundColor Yellow
-Get-NetIPConfiguration -InterfaceIndex $indice |
-    Format-List InterfaceAlias, IPv4Address, IPv4DefaultGateway, DNSServer
+$camposIP = @(
+    'InterfaceAlias',
+    @{ Name = 'IPv4Address';        Expression = { ($_.IPv4Address.IPAddress) -join ', ' } },
+    @{ Name = 'PrefixLength';       Expression = { ($_.IPv4Address.PrefixLength) -join ', ' } },
+    @{ Name = 'IPv4DefaultGateway'; Expression = { ($_.IPv4DefaultGateway.NextHop) -join ', ' } },
+    @{ Name = 'DNSServer';          Expression = { (($_.DNSServer | Where-Object AddressFamily -eq 2).ServerAddresses) -join ', ' } }
+)
+Get-NetIPConfiguration -InterfaceIndex $indice | Format-List $camposIP
 
 Write-Host "Valores que serão aplicados (vindos do 00-Config.ps1):" -ForegroundColor Yellow
 Write-Host "   IP fixo ....: $($Config.IP)/$($Config.Prefixo)"
@@ -83,8 +89,7 @@ Set-DnsClientServerAddress -InterfaceIndex $indice -ServerAddresses $Config.IP
 Write-Ok "DNS da interface apontando para $($Config.IP)"
 
 Invoke-Evidencia -Titulo 'Configuração IP aplicada' -Arquivo '01-rede\ip-fixo-aplicado.txt' -Comando {
-    Get-NetIPConfiguration -InterfaceIndex $indice |
-        Format-List InterfaceAlias, IPv4Address, IPv4DefaultGateway, DNSServer
+    Get-NetIPConfiguration -InterfaceIndex $indice | Format-List $camposIP
     Get-NetIPInterface -InterfaceIndex $indice -AddressFamily IPv4 |
         Format-Table InterfaceAlias, AddressFamily, Dhcp -AutoSize
 }

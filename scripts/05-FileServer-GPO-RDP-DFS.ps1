@@ -32,10 +32,11 @@ Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools | Out-Null
 New-Item -Path $Config.PastaShare -ItemType Directory -Force | Out-Null
 
 # Permissões NTFS da pasta compartilhada
-$acl = (Get-Item $Config.PastaShare).GetAccessControl('Access')
+$pastaShare = Get-Item $Config.PastaShare
+$acl = $pastaShare.GetAccessControl('Access')
 $acl.SetAccessRule((New-RegraNtfs -Conta $grupoAdmins     -Direitos 'Modify'))
 $acl.SetAccessRule((New-RegraNtfs -Conta $usuariosDominio -Direitos 'ReadAndExecute'))
-Set-Acl -Path $Config.PastaShare -AclObject $acl
+$pastaShare.SetAccessControl($acl)   # grava só a DACL (preserva a auditoria do script 06)
 
 # Permissões de compartilhamento (a permissão efetiva é a mais restritiva entre SMB e NTFS)
 if (-not (Get-SmbShare -Name $Config.Compartilhamento -ErrorAction SilentlyContinue)) {

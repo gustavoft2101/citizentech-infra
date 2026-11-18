@@ -18,9 +18,9 @@ $Config = [ordered]@{
     NetBIOS         = 'CITIZENTECH'
 
     # ---------- Rede: AJUSTE PARA A SUA REDE ----------
-    IP              = '192.168.1.10'
+    IP              = '192.168.200.230'
     Prefixo         = 24                       # 24 = máscara 255.255.255.0
-    Gateway         = '192.168.1.1'
+    Gateway         = '192.168.200.1'
     DnsExternos     = @('8.8.8.8', '1.1.1.1')  # encaminhadores: o DNS do AD usa estes para nomes da internet
     FusoHorario     = 'E. South America Standard Time'   # horário de Brasília (logs com hora certa)
 

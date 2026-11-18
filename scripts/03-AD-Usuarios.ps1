@@ -71,6 +71,13 @@ Write-Ok "$($Config.NomeDnsApp).$($Config.Dominio) -> $($Config.IP)"
 
 # ---------------------------------------------------------------- 3.4 validações
 Write-Passo '3.4 Validar rede, domínio e DNS'
+# Ao virar controlador de domínio, o Windows troca o DNS da placa para 127.0.0.1 e ::1.
+# Deixamos o IPv4 apontando para o IP do próprio servidor, como pede o roteiro (3.2).
+$indice = (Get-NetIPAddress -AddressFamily IPv4 -IPAddress $Config.IP).InterfaceIndex
+Set-DnsClientServerAddress -InterfaceIndex $indice -ServerAddresses $Config.IP
+Clear-DnsClientCache
+Write-Ok "DNS da placa de rede (IPv4): $($Config.IP)"
+
 Invoke-Evidencia -Titulo 'ipconfig /all' -Arquivo '01-rede\ipconfig-all.txt' -Comando { ipconfig /all }
 
 Invoke-Evidencia -Titulo 'Get-ADDomain' -Arquivo '02-ad-dns\get-addomain.txt' -Comando {
@@ -78,8 +85,9 @@ Invoke-Evidencia -Titulo 'Get-ADDomain' -Arquivo '02-ad-dns\get-addomain.txt' -C
 }
 
 Invoke-Evidencia -Titulo 'nslookup do servidor e da aplicação' -Arquivo '02-ad-dns\nslookup.txt' -Comando {
-    nslookup $FQDNServidor
-    nslookup "$($Config.NomeDnsApp).$($Config.Dominio)"
+    # Consulta feita no IP do servidor: mostra que é ele quem responde pelo domínio.
+    nslookup $FQDNServidor $Config.IP
+    nslookup "$($Config.NomeDnsApp).$($Config.Dominio)" $Config.IP
 }
 
 Invoke-Evidencia -Titulo 'Get-DnsServerZone' -Arquivo '02-ad-dns\get-dnsserverzone.txt' -Comando {

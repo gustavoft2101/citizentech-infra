@@ -50,9 +50,13 @@ $pastasAuditadas = @(
 foreach ($p in $pastasAuditadas) {
     $regra = New-Object System.Security.AccessControl.FileSystemAuditRule(
         $todosSid, $p.Direitos, 'ContainerInherit,ObjectInherit', 'None', 'Success,Failure')
-    $acl = (Get-Item $p.Pasta).GetAccessControl('Audit')
+    $pasta = Get-Item $p.Pasta
+    $acl = $pasta.GetAccessControl('Audit')
     $acl.AddAuditRule($regra)
-    Set-Acl -Path $p.Pasta -AclObject $acl
+    # SetAccessControl grava SÓ a seção alterada (a SACL). Não use Set-Acl aqui: com um objeto
+    # lido só com 'Audit', o Set-Acl grava também uma DACL vazia (nula) e a pasta e os arquivos
+    # perdem as permissões NTFS (o site passa a dar erro 500.19 / 401.3).
+    $pasta.SetAccessControl($acl)
     Write-Ok "Auditoria em $($p.Pasta): $($p.Direitos)"
 }
 
