@@ -1,0 +1,90 @@
+﻿==== Validação complementar (monitoramento, recuperação e auditoria) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:20:55
+Comando  : 'Aplicação pelo nome DNS:'
+    Invoke-WebRequest -Uri "http://$($Config.NomeDnsApp).$($Config.Dominio)" -UseBasicParsing |
+        Format-Table StatusCode, StatusDescription -AutoSize
+    'Coletores do Monitor de Desempenho:'
+    logman query | Select-String 'CitizenTech'
+    'Tarefas agendadas:'
+    Get-ScheduledTask -TaskName 'CitizenTech_*' | Get-ScheduledTaskInfo |
+        Format-Table TaskName, LastRunTime, LastTaskResult, NextRunTime -AutoSize
+    'Recuperação do W3SVC:'
+    sc.exe qfailure W3SVC
+    'Auditoria (Logon e Sistema de Arquivos):'
+    auditpol /get '/subcategory:{0CCE9215-69AE-11D9-BED3-505054503030},{0CCE921D-69AE-11D9-BED3-505054503030}'
+    'DFS:'
+    Get-DfsnRoot | Format-Table Path, State -AutoSize
+    'Usuários e grupos da OU CitizenTech:'
+    Get-ADUser -Filter * -SearchBase $CaminhoOU | Format-Table SamAccountName, Enabled -AutoSize
+    Get-ADGroup -Filter * -SearchBase $CaminhoOU | Format-Table Name, GroupScope -AutoSize
+----------------------------------------------------------------------
+Aplicação pelo nome DNS:
+
+StatusCode StatusDescription
+---------- -----------------
+       200 OK               
+
+
+Coletores do Monitor de Desempenho:
+
+CitizenTech_Alertas                     Alert                         Running 
+CitizenTech_Monitor                     Counter                       Running 
+Tarefas agendadas:
+
+
+
+TaskName                      LastRunTime         LastTaskResult NextRunTime        
+--------                      -----------         -------------- -----------        
+CitizenTech_Iniciar_Coletores 30/11/1999 00:00:00         267011                    
+CitizenTech_Monitor_Alertas   18/11/2026 12:20:20         267009 18/11/2026 12:25:25
+CitizenTech_Recuperacao       18/11/2026 12:20:20         267009 18/11/2026 12:21:21
+CitizenTech_Alertas           18/11/2026 12:04:04         267009                    
+CitizenTech_Monitor           18/11/2026 12:04:04         267009                    
+
+
+Recuperação do W3SVC:
+[SC] QueryServiceConfig2 SUCCESS
+
+SERVICE_NAME: W3SVC
+        RESET_PERIOD (in seconds)    : 86400
+        REBOOT_MESSAGE               : 
+        COMMAND_LINE                 : 
+        FAILURE_ACTIONS              : RESTART -- Delay = 5000 milliseconds.
+                                       RESTART -- Delay = 10000 milliseconds.
+                                       RESTART -- Delay = 30000 milliseconds.
+
+Auditoria (Logon e Sistema de Arquivos):
+System audit policy
+
+Category/Subcategory                      Setting
+Logon/Logoff
+  Logon                                   Success and Failure
+
+Object Access
+  File System                             Success and Failure
+
+DFS:
+
+Path                               State 
+----                               ----- 
+\\citizentech.local\CitizenTechDFS Online
+
+
+Usuários e grupos da OU CitizenTech:
+
+SamAccountName Enabled
+-------------- -------
+ana.souza         True
+carlos.lima       True
+beatriz.alves     True
+
+
+
+Name                      GroupScope
+----                      ----------
+GG_CitizenTech_Admins         Global
+GG_CitizenTech_Operadores     Global
+
+
+

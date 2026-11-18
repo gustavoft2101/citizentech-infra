@@ -1,0 +1,113 @@
+﻿==== === FICHA DA INFRAESTRUTURA === ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:20:54
+Comando  : hostname
+    ipconfig /all
+    nslookup $FQDNServidor $Config.IP
+    Test-NetConnection -ComputerName $FQDNServidor -Port 80 |
+        Format-List ComputerName, RemoteAddress, RemotePort, TcpTestSucceeded
+    Get-ADDomain | Format-Table Name, DNSRoot, NetBIOSName -AutoSize
+    Get-WindowsFeature -Name Web-Server, AD-Domain-Services, DNS, FS-FileServer, FS-DFS-Namespace |
+        Format-Table Name, InstallState -AutoSize
+    Get-Website | Format-Table Name, State, PhysicalPath -AutoSize
+    "Pool $($Config.Pool): $((Get-WebAppPoolState -Name $Config.Pool).Value)"
+    Get-Service W3SVC, WAS, DNS, NTDS, Dfs | Format-Table Name, Status -AutoSize
+    Get-SmbShare | Format-Table Name, Path -AutoSize
+    Get-GPO -All | Format-Table DisplayName, GpoStatus -AutoSize
+----------------------------------------------------------------------
+SRV-CITIZENTECH
+
+Windows IP Configuration
+
+   Host Name . . . . . . . . . . . . : SRV-CITIZENTECH
+   Primary Dns Suffix  . . . . . . . : citizentech.local
+   Node Type . . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . . : No
+   WINS Proxy Enabled. . . . . . . . : No
+   DNS Suffix Search List. . . . . . : citizentech.local
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Intel(R) PRO/1000 MT Desktop Adapter
+   Physical Address. . . . . . . . . : 08-00-27-E0-2D-36
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   Link-local IPv6 Address . . . . . : fe80::4c07:ec21:4429:d9ed%6(Preferred) 
+   IPv4 Address. . . . . . . . . . . : 192.168.200.230(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.200.1
+   DHCPv6 IAID . . . . . . . . . . . : 101187623
+   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-32-8F-AB-1D-08-00-27-E0-2D-36
+   DNS Servers . . . . . . . . . . . : ::1
+                                       192.168.200.230
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+Server:  srv-citizentech.citizentech.local
+Address:  192.168.200.230
+
+Name:    srv-citizentech.citizentech.local
+Address:  192.168.200.230
+
+
+
+ComputerName     : srv-citizentech.citizentech.local
+RemoteAddress    : fe80::4c07:ec21:4429:d9ed%6
+RemotePort       : 80
+TcpTestSucceeded : True
+
+
+
+
+Name        DNSRoot           NetBIOSName
+----        -------           -----------
+citizentech citizentech.local CITIZENTECH
+
+
+
+Name               InstallState
+----               ------------
+AD-Domain-Services    Installed
+DNS                   Installed
+FS-FileServer         Installed
+FS-DFS-Namespace      Installed
+Web-Server            Installed
+
+
+
+name        state   physicalPath          
+----        -----   ------------          
+CitizenTech Started C:\inetpub\citizentech
+
+
+Pool CitizenTechPool: Started
+
+Name   Status
+----   ------
+Dfs   Running
+DNS   Running
+NTDS  Running
+W3SVC Running
+WAS   Running
+
+
+
+Name           Path                                              
+----           ----                                              
+ADMIN$         C:\Windows                                        
+C$             C:\                                               
+CitizenTech    C:\Shares\CitizenTech                             
+CitizenTechDFS C:\DFSRoots\CitizenTechDFS                        
+IPC$                                                             
+NETLOGON       C:\Windows\SYSVOL\sysvol\citizentech.local\SCRIPTS
+SYSVOL         C:\Windows\SYSVOL\sysvol                          
+
+
+
+DisplayName                                GpoStatus
+-----------                                ---------
+GPO_CitizenTech_Usuarios          AllSettingsEnabled
+Default Domain Policy             AllSettingsEnabled
+Default Domain Controllers Policy AllSettingsEnabled
+
+
+
