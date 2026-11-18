@@ -1,0 +1,29 @@
+﻿==== Get-Counter - leitura ao vivo dos três contadores ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:04:23
+Comando  : Get-Counter -Counter $cCPU, $cRAM, $cDisco -SampleInterval 2 -MaxSamples 3 |
+        ForEach-Object { $_.CounterSamples } |
+        Format-Table Timestamp, Path, @{ n = 'Valor'; e = { [math]::Round($_.CookedValue, 2) } } -AutoSize
+    Get-ChildItem $Config.PastaPerfLogs -Recurse | Select-Object FullName, Length, LastWriteTime | Format-Table -AutoSize
+----------------------------------------------------------------------
+
+Timestamp           Path                                                 Valor
+---------           ----                                                 -----
+18/11/2026 12:04:19 \\srv-citizentech\processor(_total)\% processor time     0
+18/11/2026 12:04:19 \\srv-citizentech\memory\available mbytes             2611
+18/11/2026 12:04:19 \\srv-citizentech\logicaldisk(c:)\% free space       81,85
+18/11/2026 12:04:21 \\srv-citizentech\processor(_total)\% processor time     0
+18/11/2026 12:04:21 \\srv-citizentech\memory\available mbytes             2612
+18/11/2026 12:04:21 \\srv-citizentech\logicaldisk(c:)\% free space       81,85
+18/11/2026 12:04:23 \\srv-citizentech\processor(_total)\% processor time  0,02
+18/11/2026 12:04:23 \\srv-citizentech\memory\available mbytes             2613
+18/11/2026 12:04:23 \\srv-citizentech\logicaldisk(c:)\% free space       81,85
+
+
+
+FullName                                      Length LastWriteTime      
+--------                                      ------ -------------      
+C:\PerfLogs\CitizenTech\Recursos_11181204.csv    265 18/11/2026 12:04:09
+
+
+

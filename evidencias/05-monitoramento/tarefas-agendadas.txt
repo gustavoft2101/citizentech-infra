@@ -1,0 +1,26 @@
+﻿==== Tarefas agendadas do monitoramento ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:04:47
+Comando  : Get-ScheduledTask -TaskName 'CitizenTech_*' | Format-Table TaskName, State -AutoSize
+    Get-ScheduledTask -TaskName 'CitizenTech_*' | Get-ScheduledTaskInfo |
+        Format-Table TaskName, LastRunTime, LastTaskResult, NextRunTime -AutoSize
+----------------------------------------------------------------------
+
+TaskName                        State
+--------                        -----
+CitizenTech_Iniciar_Coletores   Ready
+CitizenTech_Monitor_Alertas   Running
+CitizenTech_Alertas           Running
+CitizenTech_Monitor           Running
+
+
+
+TaskName                      LastRunTime         LastTaskResult NextRunTime        
+--------                      -----------         -------------- -----------        
+CitizenTech_Monitor_Alertas   18/11/2026 12:04:04         267009 18/11/2026 12:05:05
+CitizenTech_Iniciar_Coletores 30/11/1999 00:00:00         267011                    
+CitizenTech_Monitor           18/11/2026 12:04:04         267009                    
+CitizenTech_Alertas           18/11/2026 12:04:04         267009                    
+
+
+

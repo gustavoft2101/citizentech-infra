@@ -1,0 +1,16 @@
+﻿==== Contadores monitorados ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:04:08
+Comando  : [pscustomobject]@{ Recurso = 'CPU';     Contador = $cCPU;   Alerta = "> $($Config.LimiteCPU) %" }
+    [pscustomobject]@{ Recurso = 'Memória'; Contador = $cRAM;   Alerta = "< $($Config.LimiteRAM_MB) MB livres" }
+    [pscustomobject]@{ Recurso = 'Disco';   Contador = $cDisco; Alerta = "< $($Config.LimiteDiscoPct) % livre" }
+----------------------------------------------------------------------
+
+Recurso Contador                            Alerta         
+------- --------                            ------         
+CPU     \Processor(_Total)\% Processor Time > 80 %         
+Memória \Memory\Available MBytes            < 500 MB livres
+Disco   \LogicalDisk(C:)\% Free Space       < 15 % livre   
+
+
+

@@ -1,0 +1,7 @@
+﻿==== Execução do Monitor-Recursos.ps1 (limiares reais) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:04:30
+Comando  : & $monitor -LimiteCPU $Config.LimiteCPU -LimiteRAM_MB $Config.LimiteRAM_MB -LimiteDisco_GB $Config.LimiteDisco_GB
+----------------------------------------------------------------------
+12:04:30 Recursos normais. CPU: 0,0% | RAM livre: 2.622 MB | Disco livre: 48,6 GB (82%)
+

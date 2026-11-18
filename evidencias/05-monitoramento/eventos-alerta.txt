@@ -1,0 +1,58 @@
+﻿==== Eventos de alerta (Application 9001 e Diagnosis-PLA 2031) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 16:22:20
+Comando  : 'Application / CitizenTechMonitor (9001):'
+    Get-WinEvent -FilterHashtable @{ LogName = 'Application'; ProviderName = 'CitizenTechMonitor'; Id = 9001 } -MaxEvents 15 -ErrorAction SilentlyContinue |
+        Format-Table TimeCreated, Id, LevelDisplayName, Message -AutoSize -Wrap
+    'Microsoft-Windows-Diagnosis-PLA/Operational (2031 = limite do alerta atingido):'
+    Get-WinEvent -FilterHashtable @{ LogName = 'Microsoft-Windows-Diagnosis-PLA/Operational'; Id = 2031 } -MaxEvents 15 -ErrorAction SilentlyContinue |
+        Format-Table TimeCreated, Id, @{ n = 'Mensagem'; e = { ($_.Message -split "`r?`n")[0] } } -AutoSize -Wrap
+----------------------------------------------------------------------
+Application / CitizenTechMonitor (9001):
+
+TimeCreated           Id LevelDisplayName Message                                                                                                                                                                           
+-----------           -- ---------------- -------                                                                                                                                                                           
+18/11/2026 12:25:44 9001 Warning          AlertaEncosta / SRV-CITIZENTECH - 2026-11-18 12:25:44 | CPU alta: 100% (limite 80%)                                                                                               
+18/11/2026 12:20:54 9001 Warning          AlertaEncosta / SRV-CITIZENTECH - 2026-11-18 12:20:54 | CPU alta: 100% (limite 80%)                                                                                               
+18/11/2026 12:06:00 9001 Warning          AlertaEncosta / SRV-CITIZENTECH - 2026-11-18 12:06:00 | CPU alta: 100% (limite 80%)                                                                                               
+18/11/2026 12:04:36 9001 Warning          AlertaEncosta / SRV-CITIZENTECH - 2026-11-18 12:04:36 | [SIMULACAO] CPU alta: 0.3% (limite -1%) | Memoria baixa: 2622 MB livres (limite 999999 MB) | Disco baixo: 48.61 GB livres 
+                                          (limite 99999 GB)                                                                                                                                                                 
+
+
+Microsoft-Windows-Diagnosis-PLA/Operational (2031 = limite do alerta atingido):
+
+TimeCreated           Id Mensagem                                                                                                                                                                                           
+-----------           -- --------                                                                                                                                                                                           
+18/11/2026 12:59:25 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 99.271584 is over the limit value of 80.000000. 80.000000 is the alert threshold     
+                         value.                                                                                                                                                                                             
+18/11/2026 12:52:25 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:52:10 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:51:55 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:51:40 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:51:25 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:51:10 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:50:55 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:50:40 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:50:25 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:50:10 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:49:55 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:49:40 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:49:25 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+18/11/2026 12:49:10 2031 Performance counter \Processor(_Total)\% Processor Time has tripped its alert threshold. The counter value of 100.000000 is over the limit value of 80.000000. 80.000000 is the alert threshold    
+                         value.                                                                                                                                                                                             
+
+
+

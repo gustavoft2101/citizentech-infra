@@ -1,0 +1,17 @@
+﻿==== Demonstração do alerta com limiares artificiais [SIMULACAO] ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:04:37
+Comando  : & $monitor -LimiteCPU -1 -LimiteRAM_MB 999999 -LimiteDisco_GB 99999 -Simulacao
+    Start-Sleep -Seconds 1
+    Get-WinEvent -FilterHashtable @{ LogName = 'Application'; ProviderName = 'CitizenTechMonitor'; Id = 9001 } -MaxEvents 3 |
+        Format-Table TimeCreated, Id, LevelDisplayName, Message -AutoSize -Wrap
+----------------------------------------------------------------------
+2026-11-18 12:04:36 | [SIMULACAO] CPU alta: 0.3% (limite -1%) | Memoria baixa: 2622 MB livres (limite 999999 MB) | Disco baixo: 48.61 GB livres (limite 99999 GB)
+
+TimeCreated           Id LevelDisplayName Message                                                                                                                                                                           
+-----------           -- ---------------- -------                                                                                                                                                                           
+18/11/2026 12:04:36 9001 Warning          AlertaEncosta / SRV-CITIZENTECH - 2026-11-18 12:04:36 | [SIMULACAO] CPU alta: 0.3% (limite -1%) | Memoria baixa: 2622 MB livres (limite 999999 MB) | Disco baixo: 48.61 GB livres 
+                                          (limite 99999 GB)                                                                                                                                                                 
+
+
+

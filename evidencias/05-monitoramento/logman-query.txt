@@ -1,0 +1,48 @@
+﻿==== logman query (conjuntos de coletores) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:04:11
+Comando  : logman query CitizenTech_Monitor
+    logman query CitizenTech_Alertas
+----------------------------------------------------------------------
+
+Name:                 CitizenTech_Monitor
+Status:               Running
+Root Path:            C:\PerfLogs\CitizenTech\
+Segment:              Off
+Schedules:            On
+Run as:               SYSTEM
+
+Name:                 CitizenTech_Monitor\CitizenTech_Monitor
+Type:                 Counter
+Output Location:      C:\PerfLogs\CitizenTech\Recursos_11181204.csv
+Append:               Off
+Circular:             Off
+Overwrite:            Off
+Sample Interval:      15 second(s)
+
+Counters:
+  \Processor(_Total)\% Processor Time
+  \Memory\Available MBytes
+  \LogicalDisk(C:)\% Free Space
+
+The command completed successfully.
+
+Name:                 CitizenTech_Alertas
+Status:               Running
+Root Path:            %systemdrive%\PerfLogs\Admin
+Segment:              Off
+Schedules:            On
+Run as:               SYSTEM
+
+Name:                 CitizenTech_Alertas\CitizenTech_Alertas
+Type:                 Alert
+Sample Interval:      15 second(s)
+Event Log:            On
+
+Thresholds:
+  \Processor(_Total)\% Processor Time>80
+  \Memory\Available MBytes<500
+  \LogicalDisk(C:)\% Free Space<15
+
+The command completed successfully.
+
