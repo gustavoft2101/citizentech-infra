@@ -39,8 +39,6 @@
 | Ocorrências de desastre registradas pelo Cemaden em 2024 | mais de 1,6 mil (recorde de alertas) | Agência Gov, jan. 2025 |
 | Redução de danos com 24 h de aviso antes de um evento extremo | até 30% | OMM, Early Warnings for All |
 
-Fonte dos números: documento de arquitetura AlertaEncosta (TOGAF/ArchiMate) da equipe.
-
 ## Impacto e indicadores
 
 Meta do piloto: **80% dos moradores cadastrados recebem o alerta pelo menos 2 horas antes** de a chuva atingir o limite de risco do seu setor.
@@ -56,28 +54,26 @@ Meta do piloto: **80% dos moradores cadastrados recebem o alerta pelo menos 2 ho
 - **ODS 13** – meta 13.1: resiliência e capacidade de adaptação a riscos climáticos
 - **ODS 3** – meta 3.d: alerta precoce e gestão de riscos à saúde
 
-## Onde entra o Operating Systems
+## O que este servidor entrega
 
-Na arquitetura ArchiMate do AlertaEncosta, este repositório implementa a camada de **Tecnologia**:
-
-| Elemento ArchiMate | Tipo | Como foi implementado |
+| Parte da infraestrutura | Tipo | Como foi implementado |
 |---|---|---|
-| Servidor AlertaEncosta (Windows Server, VM) | Node | VM `SRV-CITIZENTECH`, IP fixo, domínio `citizentech.local` |
-| Windows Server 2022 | System Software | instalação Desktop Experience |
-| IIS | System Software | site `CitizenTech`, pool `CitizenTechPool` |
-| Active Directory e DNS | System Software | floresta `citizentech.local`, OU `CitizenTech`, grupos e usuários, zona direta e reversa |
-| Hospedagem web (IIS) | Technology Service | portal AlertaEncosta publicado em `http://alertaencosta.citizentech.local` |
-| Autenticação de domínio | Technology Service | operadores da Defesa Civil no grupo `GG_CitizenTech_Operadores`, GPO aplicada à OU |
-| Monitoramento e recuperação de falhas | Technology Service | Monitor de Desempenho com alertas, `Monitor-Recursos.ps1`, `sc.exe failure`, `Recupera-Site.ps1` |
-| Rede do domínio | Communication Network | DNS, compartilhamento SMB, DFS, RDP |
+| Servidor AlertaEncosta (Windows Server, VM) | Servidor | VM `SRV-CITIZENTECH`, IP fixo, domínio `citizentech.local` |
+| Windows Server 2022 | Software do sistema | instalação Desktop Experience |
+| IIS | Software do sistema | site `CitizenTech`, pool `CitizenTechPool` |
+| Active Directory e DNS | Software do sistema | floresta `citizentech.local`, OU `CitizenTech`, grupos e usuários, zona direta e reversa |
+| Hospedagem web (IIS) | Serviço | portal AlertaEncosta publicado em `http://alertaencosta.citizentech.local` |
+| Autenticação de domínio | Serviço | operadores da Defesa Civil no grupo `GG_CitizenTech_Operadores`, GPO aplicada à OU |
+| Monitoramento e recuperação de falhas | Serviço | Monitor de Desempenho com alertas, `Monitor-Recursos.ps1`, `sc.exe failure`, `Recupera-Site.ps1` |
+| Rede do domínio | Rede | DNS, compartilhamento SMB, DFS, RDP |
 
 Requisito atendido: **"Servidor monitorado e tolerante a falhas – o sistema não pode cair durante a chuva."** Em um evento de chuva forte o número de acessos ao portal e à API sobe exatamente quando o serviço é mais necessário; por isso os alertas de CPU, memória e disco e a recuperação automática em segundos são o centro desta entrega.
 
-Princípios da arquitetura aplicados no servidor:
+Princípios aplicados no servidor:
 
 | Princípio | Aplicação |
 |---|---|
 | Privacidade por padrão (LGPD) | dados simulados; nenhuma senha no repositório; auditoria de acesso aos arquivos |
 | Acessibilidade e linguagem simples | portal com letras grandes, alto contraste, nível de risco sempre escrito (não só por cor) |
 | Funcionar com pouca conectividade | portal leve, sem bibliotecas externas, só arquivos estáticos |
-| Segurança (Cybersecurity) | firewall do Windows ativo, liberando só HTTP (80) e RDP (3389) além das regras padrão do controlador de domínio; RDP com NLA; cabeçalhos de segurança no IIS; site padrão removido; acesso de operadores pelo AD |
+| Segurança | firewall do Windows ativo, liberando só HTTP (80) e RDP (3389) além das regras padrão do controlador de domínio; RDP com NLA; cabeçalhos de segurança no IIS; site padrão removido; acesso de operadores pelo AD |

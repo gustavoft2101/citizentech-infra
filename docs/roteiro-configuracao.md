@@ -1,6 +1,6 @@
 # Roteiro de configuração – SRV-CITIZENTECH (AlertaEncosta)
 
-Este documento é o passo a passo usado para montar a infraestrutura. Ele segue a numeração do roteiro da disciplina (itens 3.1 a 8.3). Em cada item há:
+Este documento é o passo a passo usado para montar a infraestrutura. Ele segue a numeração do roteiro da atividade (itens 3.1 a 8.3). Em cada item há:
 
 - **Script**: o que rodar (faz tudo do item e salva a saída em `evidencias/`);
 - **Comandos principais**: o que o script executa, para entender e explicar;
@@ -532,7 +532,7 @@ Prontos neste repositório: veja a [estrutura](../README.md#7-estrutura-do-repos
 
 ## 7. Caminho B – hospedar a API da equipe
 
-Se a equipe preferir publicar a API REST do AlertaEncosta (disciplina de SOA) em vez do site estático, o resto da infraestrutura continua igual. Troque só a etapa 4.2:
+Se a equipe preferir publicar a API REST do AlertaEncosta em vez do site estático, o resto da infraestrutura continua igual. Troque só a etapa 4.2:
 
 1. Copie a aplicação publicada para `C:\inetpub\citizentech` (substitua o conteúdo de `app\alertaencosta-web` ou ajuste `$PastaApp` no `00-Config.ps1`).
 2. Instale o runtime e o módulo de hospedagem:
