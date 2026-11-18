@@ -79,6 +79,16 @@ html.contraste .topo { background: #000; border-bottom: 2px solid #fff; color: v
 .topo__local { display: block; font-size: .85rem; opacity: .85; }
 
 .topo__acess { display: flex; gap: .5rem; flex-wrap: wrap; }
+.topo__conexao {
+  margin: 0;
+  padding: .3rem .75rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  background: rgba(255, 255, 255, .15);
+}
+.topo__conexao--ok { background: #e3f3e8; color: #14532d; }
+.topo__conexao--falha { background: #fde3e0; color: #8f1d17; font-weight: 700; }
+html.contraste .topo__conexao { background: #000; color: var(--marca); border: 2px solid var(--marca); }
 .topo__acess button {
   font: inherit;
   font-size: .85rem;
