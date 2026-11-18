@@ -1,0 +1,25 @@
+﻿==== Últimas linhas do log do IIS ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:15
+Comando  : $ultimo = Get-ChildItem 'C:\inetpub\logs\LogFiles' -Recurse -Filter *.log |
+        Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    "Arquivo: $($ultimo.FullName)"
+    Get-Content $ultimo.FullName -Tail 15
+----------------------------------------------------------------------
+Arquivo: C:\inetpub\logs\LogFiles\W3SVC1\u_ex261118.log
+#Version: 1.0
+#Date: 2026-11-18 15:13:50
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2026-11-18 15:13:50 ::1 GET / - 80 - ::1 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 500 19 5 3
+2026-11-18 15:14:33 ::1 GET / - 80 - ::1 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 500 19 5 55
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2026-11-18 15:14:52
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2026-11-18 15:14:52 ::1 GET / - 80 - ::1 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 200 0 0 6
+2026-11-18 15:14:57 ::1 GET / - 80 - ::1 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 200 0 0 14
+2026-11-18 15:14:57 192.168.200.230 GET / - 80 - 192.168.200.230 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 200 0 0 0
+2026-11-18 15:14:57 192.168.200.230 GET / - 80 - 192.168.200.230 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 200 0 0 1
+2026-11-18 15:14:57 ::1 GET /servidor.json - 80 - ::1 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 200 0 0 2
+2026-11-18 15:15:12 ::1 GET / - 80 - ::1 Mozilla/5.0+(Windows+NT;+Windows+NT+10.0;+pt-BR)+WindowsPowerShell/5.1.20348.558 - 200 0 0 1
+

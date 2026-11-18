@@ -1,0 +1,13 @@
+﻿==== Arquivos de log do IIS ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:15
+Comando  : Get-ChildItem 'C:\inetpub\logs\LogFiles' -Recurse -File |
+        Select-Object FullName, Length, LastWriteTime | Format-Table -AutoSize
+----------------------------------------------------------------------
+
+FullName                                       Length LastWriteTime      
+--------                                       ------ -------------      
+C:\inetpub\logs\LogFiles\W3SVC1\u_ex261118.log   3454 18/11/2026 12:14:35
+
+
+

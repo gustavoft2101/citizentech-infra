@@ -1,0 +1,80 @@
+﻿==== Últimos eventos do log Security ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:15
+Comando  : Get-WinEvent -LogName Security -MaxEvents 20 |
+        Select-Object TimeCreated, Id, @{ n = 'Resumo'; e = { ($_.Message -split "`r?`n")[0] } } |
+        Format-Table -AutoSize -Wrap
+
+    'Logons (4624 sucesso / 4625 falha) - últimos 10:'
+    Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4624, 4625 } -MaxEvents 10 |
+        Select-Object TimeCreated, Id,
+            @{ n = 'Conta';         e = { $_.Properties[5].Value } },
+            @{ n = 'TipoDeLogon';   e = { if ($_.Id -eq 4624) { $_.Properties[8].Value } else { $_.Properties[10].Value } } } |
+        Format-Table -AutoSize
+
+    'Acesso a arquivos auditados (4663) nas pastas do projeto - últimos 10:'
+    Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4663 } -MaxEvents 500 -ErrorAction SilentlyContinue |
+        Where-Object { "$($_.Properties[6].Value)" -match 'citizentech' } | Select-Object -First 10 |
+        Select-Object TimeCreated, Id,
+            @{ n = 'Conta';   e = { $_.Properties[1].Value } },
+            @{ n = 'Arquivo'; e = { $_.Properties[6].Value } } |
+        Format-Table -AutoSize -Wrap
+----------------------------------------------------------------------
+
+TimeCreated           Id Resumo                                   
+-----------           -- ------                                   
+18/11/2026 12:15:13 4634 An account was logged off.               
+18/11/2026 12:15:13 4624 An account was successfully logged on.   
+18/11/2026 12:15:13 4672 Special privileges assigned to new logon.
+18/11/2026 12:15:12 4663 An attempt was made to access an object. 
+18/11/2026 12:15:12 4663 An attempt was made to access an object. 
+18/11/2026 12:15:12 4663 An attempt was made to access an object. 
+18/11/2026 12:15:12 4663 An attempt was made to access an object. 
+18/11/2026 12:15:12 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4663 An attempt was made to access an object. 
+18/11/2026 12:15:11 4634 An account was logged off.               
+18/11/2026 12:15:11 4624 An account was successfully logged on.   
+18/11/2026 12:15:11 4672 Special privileges assigned to new logon.
+18/11/2026 12:15:11 4634 An account was logged off.               
+18/11/2026 12:15:11 4624 An account was successfully logged on.   
+18/11/2026 12:15:11 4672 Special privileges assigned to new logon.
+
+
+Logons (4624 sucesso / 4625 falha) - últimos 10:
+
+TimeCreated           Id Conta            TipoDeLogon
+-----------           -- -----            -----------
+18/11/2026 12:15:13 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:11 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:11 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:11 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:11 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:11 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:10 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:10 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:10 4624 SRV-CITIZENTECH$           3
+18/11/2026 12:15:10 4624 SRV-CITIZENTECH$           3
+
+
+Acesso a arquivos auditados (4663) nas pastas do projeto - últimos 10:
+
+TimeCreated           Id Conta           Arquivo                                  
+-----------           -- -----           -------                                  
+18/11/2026 12:15:12 4663 Administrator   C:\Shares\CitizenTech\teste-auditoria.txt
+18/11/2026 12:15:12 4663 Administrator   C:\Shares\CitizenTech\teste-auditoria.txt
+18/11/2026 12:15:12 4663 Administrator   C:\Shares\CitizenTech\teste-auditoria.txt
+18/11/2026 12:15:12 4663 Administrator   C:\Shares\CitizenTech\teste-auditoria.txt
+18/11/2026 12:15:12 4663 CitizenTechPool C:\inetpub\citizentech\index.html        
+18/11/2026 12:15:11 4663 Administrator   C:\Shares\CitizenTech                    
+18/11/2026 12:15:11 4663 Administrator   C:\inetpub\citizentech\js                
+18/11/2026 12:15:11 4663 Administrator   C:\inetpub\citizentech\img               
+18/11/2026 12:15:11 4663 Administrator   C:\inetpub\citizentech\data              
+18/11/2026 12:15:11 4663 Administrator   C:\inetpub\citizentech\css               
+
+
+

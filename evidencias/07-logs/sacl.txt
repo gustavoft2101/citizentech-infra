@@ -1,0 +1,24 @@
+﻿==== Regras de auditoria (Get-Acl -Audit) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:15:11
+Comando  : foreach ($p in $pastasAuditadas) {
+        "Pasta: $($p.Pasta)"
+        (Get-Acl -Path $p.Pasta -Audit).Audit |
+            Format-Table IdentityReference, FileSystemRights, AuditFlags, InheritanceFlags -AutoSize
+    }
+----------------------------------------------------------------------
+Pasta: C:\inetpub\citizentech
+
+IdentityReference      FileSystemRights       AuditFlags                InheritanceFlags
+-----------------      ----------------       ----------                ----------------
+Everyone          ReadData, CreateFiles Success, Failure ContainerInherit, ObjectInherit
+
+
+Pasta: C:\Shares\CitizenTech
+
+IdentityReference              FileSystemRights       AuditFlags                InheritanceFlags
+-----------------              ----------------       ----------                ----------------
+Everyone          ReadData, CreateFiles, Delete Success, Failure ContainerInherit, ObjectInherit
+
+
+
