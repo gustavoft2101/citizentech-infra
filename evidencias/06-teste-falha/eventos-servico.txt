@@ -1,0 +1,58 @@
+﻿==== Eventos de serviço do IIS (7031/7034 queda inesperada, 7036 mudança de estado) e recuperação (9101) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 16:22:21
+Comando  : $nomes = @((Get-Service W3SVC).DisplayName, (Get-Service WAS).DisplayName) | ForEach-Object { [regex]::Escape($_) }
+    Get-WinEvent -FilterHashtable @{ LogName = 'System'; ProviderName = 'Service Control Manager'; Id = 7031, 7034, 7036 } -MaxEvents 400 -ErrorAction SilentlyContinue |
+        Where-Object { $_.Message -match ($nomes -join '|') } | Select-Object -First 25 |
+        Format-Table TimeCreated, Id, @{ n = 'Mensagem'; e = { ($_.Message -split "`r?`n")[0] } } -AutoSize -Wrap
+    Get-WinEvent -FilterHashtable @{ LogName = 'Application'; ProviderName = 'CitizenTechRecuperacao' } -MaxEvents 15 -ErrorAction SilentlyContinue |
+        Format-Table TimeCreated, Id, LevelDisplayName, Message -AutoSize -Wrap
+----------------------------------------------------------------------
+
+TimeCreated           Id Mensagem                                                                                                                                                                                      
+-----------           -- --------                                                                                                                                                                                      
+18/11/2026 16:20:52 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 16:18:14 7036 The World Wide Web Publishing Service service entered the stopped state.                                                                                                                      
+18/11/2026 12:19:19 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 12:19:19 7036 The Windows Process Activation Service service entered the running state.                                                                                                                     
+18/11/2026 12:19:14 7031 The Windows Process Activation Service service terminated unexpectedly.  It has done this 1 time(s).  The following corrective action will be taken in 5000 milliseconds: Restart the service.
+18/11/2026 12:19:14 7031 The World Wide Web Publishing Service service terminated unexpectedly.  It has done this 1 time(s).  The following corrective action will be taken in 5000 milliseconds: Restart the service. 
+18/11/2026 12:18:36 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 12:18:27 7036 The World Wide Web Publishing Service service entered the stopped state.                                                                                                                      
+18/11/2026 12:14:39 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 12:14:39 7036 The Windows Process Activation Service service entered the running state.                                                                                                                     
+18/11/2026 12:14:37 7036 The Windows Process Activation Service service entered the stopped state.                                                                                                                     
+18/11/2026 12:14:35 7036 The World Wide Web Publishing Service service entered the stopped state.                                                                                                                      
+18/11/2026 12:13:39 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 12:13:39 7036 The Windows Process Activation Service service entered the running state.                                                                                                                     
+18/11/2026 12:13:37 7036 The Windows Process Activation Service service entered the stopped state.                                                                                                                     
+18/11/2026 12:13:35 7036 The World Wide Web Publishing Service service entered the stopped state.                                                                                                                      
+18/11/2026 12:12:40 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 12:12:40 7036 The Windows Process Activation Service service entered the running state.                                                                                                                     
+18/11/2026 12:12:38 7036 The Windows Process Activation Service service entered the stopped state.                                                                                                                     
+18/11/2026 12:12:36 7036 The World Wide Web Publishing Service service entered the stopped state.                                                                                                                      
+18/11/2026 12:11:34 7036 The World Wide Web Publishing Service service entered the running state.                                                                                                                      
+18/11/2026 12:11:34 7036 The Windows Process Activation Service service entered the running state.                                                                                                                     
+18/11/2026 12:11:32 7036 The Windows Process Activation Service service entered the stopped state.                                                                                                                     
+18/11/2026 12:11:30 7036 The World Wide Web Publishing Service service entered the stopped state.                                                                                                                      
+18/11/2026 11:53:27 7036 The Windows Process Activation Service service entered the stopped state.                                                                                                                     
+
+
+
+TimeCreated           Id LevelDisplayName Message                                                                                                           
+-----------           -- ---------------- -------                                                                                                           
+18/11/2026 12:19:40 9101 Information      AlertaEncosta / SRV-CITIZENTECH - Recuperado: site respondendo com HTTP 200.                                      
+18/11/2026 12:19:40 9101 Warning          AlertaEncosta / SRV-CITIZENTECH - Pool CitizenTechPool estava Stopped. Reiniciando.                               
+18/11/2026 12:18:57 9101 Information      AlertaEncosta / SRV-CITIZENTECH - Recuperado: site respondendo com HTTP 200.                                      
+18/11/2026 12:18:36 9101 Warning          AlertaEncosta / SRV-CITIZENTECH - Servico W3SVC estava Stopped. Iniciando.                                        
+18/11/2026 12:14:52 9101 Information      AlertaEncosta / SRV-CITIZENTECH - Recuperado apos iisreset. HTTP 200.                                             
+18/11/2026 12:14:33 9101 Warning          AlertaEncosta / SRV-CITIZENTECH - Site nao responde (HTTP 500). Executando iisreset.                              
+18/11/2026 12:13:50 9101 Error            AlertaEncosta / SRV-CITIZENTECH - Falha persistente (HTTP 500). Verificar logs do IIS e o Visualizador de Eventos.
+18/11/2026 12:13:33 9101 Warning          AlertaEncosta / SRV-CITIZENTECH - Site nao responde (HTTP 500). Executando iisreset.                              
+18/11/2026 12:12:49 9101 Error            AlertaEncosta / SRV-CITIZENTECH - Falha persistente (HTTP 500). Verificar logs do IIS e o Visualizador de Eventos.
+18/11/2026 12:12:35 9101 Warning          AlertaEncosta / SRV-CITIZENTECH - Site nao responde (HTTP 500). Executando iisreset.                              
+18/11/2026 12:11:45 9101 Error            AlertaEncosta / SRV-CITIZENTECH - Falha persistente (HTTP 500). Verificar logs do IIS e o Visualizador de Eventos.
+18/11/2026 12:11:28 9101 Warning          AlertaEncosta / SRV-CITIZENTECH - Site nao responde (HTTP 500). Executando iisreset.                              
+
+
+

@@ -1,0 +1,27 @@
+﻿==== Configuração de recuperação do pool ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:16:30
+Comando  : $p = Get-Item $caminhoPool
+    [pscustomobject]@{
+        Pool                = $p.name
+        Estado              = $p.state
+        Runtime             = "'$($p.managedRuntimeVersion)' (vazio = sem código gerenciado)"
+        AutoStart           = $p.autoStart
+        StartMode           = $p.startMode
+        RapidFailProtection = $p.failure.rapidFailProtection
+        PingHabilitado      = $p.processModel.pingingEnabled
+    } | Format-List
+----------------------------------------------------------------------
+
+
+Pool                : CitizenTechPool
+Estado              : Started
+Runtime             : '' (vazio = sem código gerenciado)
+AutoStart           : True
+StartMode           : AlwaysRunning
+RapidFailProtection : False
+PingHabilitado      : True
+
+
+
+

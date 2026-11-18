@@ -1,0 +1,103 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261118121925
+Username: CITIZENTECH\Administrator
+RunAs User: CITIZENTECH\Administrator
+Configuration Name: 
+Machine: SRV-CITIZENTECH (Microsoft Windows NT 10.0.20348.0)
+Host Application: C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -command import-module ActiveDirectory
+Process ID: 5544
+PSVersion: 5.1.20348.558
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.20348.558
+BuildVersion: 10.0.20348.558
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+=== TESTE DE FALHA - CITIZENTECH / ALERTAENCOSTA ===
+Cenário: Pool | Servidor: SRV-CITIZENTECH | Início: 18/11/2026 12:19:25
+
+[1] Estado antes:
+
+Name   Status StartType
+----   ------ ---------
+W3SVC Running Automatic
+WAS   Running    Manual
+
+
+   Pool CitizenTechPool : Started
+   Site http://localhost : HTTP 200 OK
+
+[2] Parando o pool de aplicativos CitizenTechPool...
+
+Name   Status
+----   ------
+W3SVC Running
+WAS   Running
+
+
+   Pool CitizenTechPool : Stopping
+
+[3] Tentando acessar o site durante a falha...
+PS>TerminatingError(Invoke-WebRequest): "
+Service Unavailable
+
+Service Unavailable
+HTTP Error 503. The service is unavailable.
+
+"
+   Site indisponível, como esperado: HTTP 503 - The remote server returned an error: (503) Server Unavailable.
+
+[4] Aguardando recuperação automática (até 150 s)...
+   Responsável: tarefa agendada CitizenTech_Recuperacao (Recupera-Site.ps1, a cada 1 min)
+PS>TerminatingError(Invoke-WebRequest): "
+Service Unavailable
+
+Service Unavailable
+HTTP Error 503. The service is unavailable.
+
+"
+   6s: ainda fora do ar (HTTP 503)
+PS>TerminatingError(Invoke-WebRequest): "
+Service Unavailable
+
+Service Unavailable
+HTTP Error 503. The service is unavailable.
+
+"
+   10s: ainda fora do ar (HTTP 503)
+PS>TerminatingError(Invoke-WebRequest): "
+Service Unavailable
+
+Service Unavailable
+HTTP Error 503. The service is unavailable.
+
+"
+   14s: ainda fora do ar (HTTP 503)
+   18s: site respondeu HTTP 200.
+
+[5] Estado depois:
+
+Name   Status StartType
+----   ------ ---------
+W3SVC Running Automatic
+WAS   Running    Manual
+
+
+   Pool CitizenTechPool : Started
+   Site http://localhost : HTTP 200 OK
+
+RESULTADO: recuperação AUTOMÁTICA em 18 segundos, sem intervenção manual.
+
+Eventos do Gerenciador de Serviços desde o início do teste (7031/7034 = queda inesperada, 7036 = mudança de estado):
+Últimas linhas de C:\Scripts\logs\recuperacao.log :
+2026-11-18 12:18:36 | Servico W3SVC estava Stopped. Iniciando.
+2026-11-18 12:18:54 | Recuperado: site respondendo com HTTP 200.
+2026-11-18 12:19:40 | Pool CitizenTechPool estava Stopped. Reiniciando.
+2026-11-18 12:19:40 | Recuperado: site respondendo com HTTP 200.
+**********************
+Windows PowerShell transcript end
+End time: 20261118121943
+**********************

@@ -1,0 +1,22 @@
+﻿==== Execução manual do Recupera-Site.ps1 (com tudo no ar) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:16:32
+Comando  : & $recupera -Site $Config.Site -Pool $Config.Pool
+    Get-ScheduledTask -TaskName 'CitizenTech_Recuperacao' | Format-Table TaskName, State -AutoSize
+    Get-ScheduledTask -TaskName 'CitizenTech_Recuperacao' | Get-ScheduledTaskInfo |
+        Format-Table TaskName, LastRunTime, NextRunTime -AutoSize
+----------------------------------------------------------------------
+12:16:31 Tudo normal: W3SVC, WAS, pool e site ativos; HTTP 200.
+
+TaskName                  State
+--------                  -----
+CitizenTech_Recuperacao Running
+
+
+
+TaskName                LastRunTime         NextRunTime        
+--------                -----------         -----------        
+CitizenTech_Recuperacao 18/11/2026 12:16:16 18/11/2026 12:17:17
+
+
+

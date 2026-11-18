@@ -1,0 +1,78 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261118121824
+Username: CITIZENTECH\Administrator
+RunAs User: CITIZENTECH\Administrator
+Configuration Name: 
+Machine: SRV-CITIZENTECH (Microsoft Windows NT 10.0.20348.0)
+Host Application: C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -command import-module ActiveDirectory
+Process ID: 5544
+PSVersion: 5.1.20348.558
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.20348.558
+BuildVersion: 10.0.20348.558
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+=== TESTE DE FALHA - CITIZENTECH / ALERTAENCOSTA ===
+Cenário: Servico | Servidor: SRV-CITIZENTECH | Início: 18/11/2026 12:18:24
+
+[1] Estado antes:
+
+Name   Status StartType
+----   ------ ---------
+W3SVC Running Automatic
+WAS   Running    Manual
+
+
+   Pool CitizenTechPool : Started
+   Site http://localhost : HTTP 200 OK
+
+[2] Derrubando o serviço W3SVC (Stop-Service)...
+WARNING: Waiting for service 'World Wide Web Publishing Service (W3SVC)' to stop...
+
+Name   Status
+----   ------
+W3SVC Stopped
+WAS   Running
+
+
+   Pool CitizenTechPool : Started
+
+[3] Tentando acessar o site durante a falha...
+PS>TerminatingError(Invoke-WebRequest): "The operation has timed out."
+   Site indisponível, como esperado: HTTP 0 - The operation has timed out.
+
+[4] Aguardando recuperação automática (até 150 s)...
+   Responsável: tarefa agendada CitizenTech_Recuperacao (Recupera-Site.ps1, a cada 1 min)
+   16s: site respondeu HTTP 200.
+
+[5] Estado depois:
+
+Name   Status StartType
+----   ------ ---------
+W3SVC Running Automatic
+WAS   Running    Manual
+
+
+   Pool CitizenTechPool : Started
+   Site http://localhost : HTTP 200 OK
+
+RESULTADO: recuperação AUTOMÁTICA em 16 segundos, sem intervenção manual.
+
+Eventos do Gerenciador de Serviços desde o início do teste (7031/7034 = queda inesperada, 7036 = mudança de estado):
+
+TimeCreated           Id Mensagem
+-----------           -- --------
+18/11/2026 12:18:27 7036 The World Wide Web Publishing Service service entered the stopped state.
+18/11/2026 12:18:36 7036 The World Wide Web Publishing Service service entered the running state.
+
+
+Últimas linhas de C:\Scripts\logs\recuperacao.log :
+2026-11-18 12:18:36 | Servico W3SVC estava Stopped. Iniciando.
+**********************
+Windows PowerShell transcript end
+End time: 20261118121840
+**********************

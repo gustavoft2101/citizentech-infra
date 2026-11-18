@@ -1,0 +1,82 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261118121910
+Username: CITIZENTECH\Administrator
+RunAs User: CITIZENTECH\Administrator
+Configuration Name: 
+Machine: SRV-CITIZENTECH (Microsoft Windows NT 10.0.20348.0)
+Host Application: C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -command import-module ActiveDirectory
+Process ID: 5544
+PSVersion: 5.1.20348.558
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.20348.558
+BuildVersion: 10.0.20348.558
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+=== TESTE DE FALHA - CITIZENTECH / ALERTAENCOSTA ===
+Cenário: Crash | Servidor: SRV-CITIZENTECH | Início: 18/11/2026 12:19:11
+
+[1] Estado antes:
+
+Name   Status StartType
+----   ------ ---------
+W3SVC Running Automatic
+WAS   Running    Manual
+
+
+   Pool CitizenTechPool : Started
+   Site http://localhost : HTTP 200 OK
+
+[2] Simulando TRAVAMENTO: encerrando à força o processo do W3SVC...
+   Processo svchost PID 3740 hospeda: W3SVC, WAS
+
+Name   Status
+----   ------
+W3SVC Stopped
+WAS   Stopped
+
+
+   Pool CitizenTechPool :
+
+[3] Tentando acessar o site durante a falha...
+   O site ainda respondeu (a recuperação foi mais rápida que o teste).
+
+[4] Aguardando recuperação automática (até 150 s)...
+   Responsável: Gerenciador de Serviços do Windows (sc.exe failure: reinicia o W3SVC em 5 s)
+   13s: site respondeu HTTP 200.
+
+[5] Estado depois:
+
+Name   Status StartType
+----   ------ ---------
+W3SVC Running Automatic
+WAS   Running    Manual
+
+
+   Pool CitizenTechPool : Started
+   Site http://localhost : HTTP 200 OK
+
+RESULTADO: recuperação AUTOMÁTICA em 14 segundos, sem intervenção manual.
+
+Eventos do Gerenciador de Serviços desde o início do teste (7031/7034 = queda inesperada, 7036 = mudança de estado):
+
+TimeCreated           Id Mensagem
+-----------           -- --------
+18/11/2026 12:19:14 7031 The Windows Process Activation Service service terminated unexpectedly.  It has done this 1 time(s).  The following corrective
+                         action will be taken in 5000 milliseconds: Restart the service.
+18/11/2026 12:19:14 7031 The World Wide Web Publishing Service service terminated unexpectedly.  It has done this 1 time(s).  The following corrective
+                         action will be taken in 5000 milliseconds: Restart the service.
+18/11/2026 12:19:19 7036 The Windows Process Activation Service service entered the running state.
+18/11/2026 12:19:19 7036 The World Wide Web Publishing Service service entered the running state.
+
+
+Últimas linhas de C:\Scripts\logs\recuperacao.log :
+2026-11-18 12:18:36 | Servico W3SVC estava Stopped. Iniciando.
+2026-11-18 12:18:54 | Recuperado: site respondendo com HTTP 200.
+**********************
+Windows PowerShell transcript end
+End time: 20261118121924
+**********************
