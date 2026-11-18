@@ -1,0 +1,16 @@
+﻿==== Get-ADDomain ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:41:06
+Comando  : Get-ADDomain | Select-Object Name, DNSRoot, NetBIOSName, DomainMode, PDCEmulator | Format-List
+----------------------------------------------------------------------
+
+
+Name        : citizentech
+DNSRoot     : citizentech.local
+NetBIOSName : CITIZENTECH
+DomainMode  : Windows2016Domain
+PDCEmulator : SRV-CITIZENTECH.citizentech.local
+
+
+
+

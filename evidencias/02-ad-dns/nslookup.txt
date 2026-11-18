@@ -1,0 +1,20 @@
+﻿==== nslookup do servidor e da aplicação ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:41:06
+Comando  : # Consulta feita no IP do servidor: mostra que é ele quem responde pelo domínio.
+    nslookup $FQDNServidor $Config.IP
+    nslookup "$($Config.NomeDnsApp).$($Config.Dominio)" $Config.IP
+----------------------------------------------------------------------
+Server:  srv-citizentech.citizentech.local
+Address:  192.168.200.230
+
+Name:    srv-citizentech.citizentech.local
+Address:  192.168.200.230
+
+Server:  srv-citizentech.citizentech.local
+Address:  192.168.200.230
+
+Name:    alertaencosta.citizentech.local
+Address:  192.168.200.230
+
+

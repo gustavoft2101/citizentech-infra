@@ -1,0 +1,24 @@
+﻿==== Membros dos grupos ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:41:08
+Comando  : foreach ($g in @($Config.GrupoAdmins, $Config.GrupoOperadores)) {
+        "Grupo: $g"
+        Get-ADGroupMember -Identity $g | Select-Object Name, SamAccountName, objectClass | Format-Table -AutoSize
+    }
+----------------------------------------------------------------------
+Grupo: GG_CitizenTech_Admins
+
+Name      SamAccountName objectClass
+----      -------------- -----------
+Ana Souza ana.souza      user       
+
+
+Grupo: GG_CitizenTech_Operadores
+
+Name          SamAccountName objectClass
+----          -------------- -----------
+Carlos Lima   carlos.lima    user       
+Beatriz Alves beatriz.alves  user       
+
+
+

@@ -1,0 +1,15 @@
+﻿==== Install-ADDSForest (resultado) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:12:15
+Comando  : $resultado | Format-List Status, Message, RebootRequired
+----------------------------------------------------------------------
+
+
+Status         : Success
+Message        : You must restart this computer to complete the operation.
+                 
+RebootRequired : True
+
+
+
+

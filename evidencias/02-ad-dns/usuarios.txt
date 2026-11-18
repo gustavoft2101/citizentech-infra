@@ -1,0 +1,15 @@
+﻿==== Usuários da OU CitizenTech ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:41:07
+Comando  : Get-ADUser -Filter * -SearchBase $CaminhoOU -Properties Description |
+        Select-Object Name, SamAccountName, Enabled, Description | Format-Table -AutoSize
+----------------------------------------------------------------------
+
+Name          SamAccountName Enabled Description                              
+----          -------------- ------- -----------                              
+Ana Souza     ana.souza         True Administradora da aplicacao AlertaEncosta
+Carlos Lima   carlos.lima       True Operador da Defesa Civil (usuario comum) 
+Beatriz Alves beatriz.alves     True Operadora da Defesa Civil (usuario comum)
+
+
+

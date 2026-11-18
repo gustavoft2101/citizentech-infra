@@ -1,0 +1,14 @@
+﻿==== Encaminhadores DNS ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:41:04
+Comando  : Get-DnsServerForwarder | Format-List IPAddress, UseRootHint, Timeout
+----------------------------------------------------------------------
+
+
+IPAddress   : {8.8.8.8, 1.1.1.1}
+UseRootHint : True
+Timeout     : 3
+
+
+
+

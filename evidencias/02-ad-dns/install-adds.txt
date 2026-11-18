@@ -1,0 +1,13 @@
+﻿==== Install-WindowsFeature AD-Domain-Services ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:10:08
+Comando  : Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools |
+        Format-Table Success, RestartNeeded, ExitCode, FeatureResult -AutoSize -Wrap
+----------------------------------------------------------------------
+
+Success RestartNeeded ExitCode FeatureResult                                                                                                                             
+------- ------------- -------- -------------                                                                                                                             
+   True            No  Success {Active Directory Domain Services, Group Policy Management, Remote Server Administration Tools, Active Directory Administrative Center...}
+
+
+

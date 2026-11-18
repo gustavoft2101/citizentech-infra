@@ -1,0 +1,17 @@
+﻿==== Get-DnsServerZone ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 11:41:07
+Comando  : Get-DnsServerZone | Format-Table ZoneName, ZoneType, IsDsIntegrated, IsReverseLookupZone -AutoSize
+----------------------------------------------------------------------
+
+ZoneName                 ZoneType IsDsIntegrated IsReverseLookupZone
+--------                 -------- -------------- -------------------
+_msdcs.citizentech.local Primary            True               False
+0.in-addr.arpa           Primary           False                True
+127.in-addr.arpa         Primary           False                True
+200.168.192.in-addr.arpa Primary            True                True
+255.in-addr.arpa         Primary           False                True
+citizentech.local        Primary            True               False
+
+
+
