@@ -25,23 +25,11 @@ Infraestrutura Windows Server que hospeda, monitora e recupera automaticamente a
 | **Cidadão beneficiado** | Morador de encosta ou área alagável; prioridade para idosos e pessoas com deficiência. Também atende o agente da Defesa Civil e o líder comunitário (NUPDEC) |
 | **Problema, em uma frase** | Quem mora em área de risco só descobre que a chuva ficou perigosa quando a água ou a terra já chegou, porque os alertas atuais são genéricos, chegam tarde e não dizem para onde ir |
 | **Como funciona** | Uma estação ESP32 na encosta mede chuva, umidade do solo e nível do córrego → a API grava as leituras e o modelo de ML calcula o risco de cada setor → quando passa do limite, o morador recebe um alerta com a rota a pé até o ponto de apoio → a Defesa Civil acompanha tudo em um painel |
-| **O que cada parte faz** | Ver tabela abaixo |
 | **Indicador de impacto** | Meta do piloto: 80% dos moradores cadastrados alertados pelo menos 2 h antes de a chuva atingir o limite de risco do setor. Também medimos: antecedência média do alerta, % de alertados que confirmaram estar seguros, reportes atendidos e pessoas com mobilidade reduzida retiradas a tempo |
 | **ODS conectados** | ODS 11 (meta 11.5, reduzir mortes e afetados por desastres), ODS 13 (meta 13.1, resiliência a riscos climáticos), ODS 3 (meta 3.d, alerta precoce) |
 | **Link do repositório** | https://github.com/gustavoft2101/citizentech-infra |
 
-| Disciplina | Parte do AlertaEncosta |
-|---|---|
-| Physical Computing (IoT) | Estação de monitoramento ESP32 no Wokwi (pluviômetro, umidade do solo, nível da água) |
-| SOA e Web Services | API REST AlertaEncosta, domínio e banco de dados |
-| IA e Machine Learning | Modelo de previsão de risco por setor (Python) |
-| Mobile Development | App do morador em React Native + Expo (alerta, rota, reporte com câmera e GPS) |
-| C# Software Development | Painel da Defesa Civil em Windows Forms |
-| **Operating Systems (este repositório)** | **Windows Server com AD, DNS, IIS, File Server, GPO, RDP, DFS, monitoramento com alertas, auditoria e recuperação automática de falhas** |
-| Cybersecurity | Gestão de riscos, LGPD, prepared statements contra SQL Injection |
-| Testing, Compliance & QA | Arquitetura TOGAF/ArchiMate |
-
-Na arquitetura ArchiMate da equipe, este repositório implementa a **camada de Tecnologia**: o nó *Servidor AlertaEncosta (Windows Server, VM)*, os softwares de sistema *IIS* e *Active Directory e DNS*, e os serviços de tecnologia *Hospedagem web (IIS)*, *Autenticação de domínio* e *Monitoramento e recuperação de falhas*. Ele atende o requisito **"Servidor monitorado e tolerante a falhas: o sistema não pode cair durante a chuva"**.
+Este repositório é a parte de **infraestrutura** do AlertaEncosta: o servidor que hospeda o portal, controla o acesso dos operadores e se mantém no ar sozinho. Ele atende o requisito **"Servidor monitorado e tolerante a falhas: o sistema não pode cair durante a chuva"**.
 
 ---
 
