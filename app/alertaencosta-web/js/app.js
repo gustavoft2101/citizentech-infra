@@ -8,6 +8,7 @@
   var URL_DADOS = 'data/setores.json';
   var URL_SERVIDOR = 'servidor.json';
   var INTERVALO_MS = 60000;
+  var INTERVALO_CONEXAO_MS = 5000;   // checagem leve: mostra na hora se o servidor caiu ou voltou
 
   var NIVEIS = {
     alto:  { rotulo: 'Alto',  ordem: 3, titulo: 'ALERTA ALTO: saia agora pela rota segura' },
@@ -30,7 +31,6 @@
   function buscarJson(url, sucesso, falha) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', semCache(url), true);
-    xhr.setRequestHeader('Accept', 'application/json');
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) { return; }
       if (xhr.status === 200) {
@@ -150,9 +150,35 @@
     var alvo = document.getElementById('servidor');
     buscarJson(URL_SERVIDOR, function (s) {
       alvo.textContent = 'Servido por ' + s.servidor + ' (' + s.ip + ') · domínio ' + s.dominio +
-        ' · IIS ' + String(s.iis).replace('Version ', '') + ' · site ' + s.site + ' / pool ' + s.pool + ' · publicado em ' + s.publicadoEm;
+        ' · IIS ' + String(s.iis).replace('Version ', '') + ' · site ' + s.site + ' / pool ' + s.pool + ' · publicado em ' + s.publicadoEm +
+        ' · acessado em ' + window.location.host + ' às ' + new Date().toLocaleString('pt-BR');
     }, function () {
       alvo.textContent = 'Servidor: servidor.json não encontrado (ele é gerado pelo script 04-IIS-Aplicacao.ps1 na publicação).';
+    });
+  }
+
+  // ---------- conexão com o servidor (aparece no topo da página) ----------
+  var foraDesde = null;
+  var ultimaQueda = '';
+  function hora(d) { return d.toLocaleTimeString('pt-BR'); }
+  function verificarConexao() {
+    var alvo = document.getElementById('conexao');
+    buscarJson(URL_SERVIDOR, function (s) {
+      var agora = new Date();
+      if (foraDesde) {
+        // o servidor voltou: guarda o intervalo fora do ar e recarrega os dados
+        ultimaQueda = 'fora do ar das ' + hora(foraDesde) + ' às ' + hora(agora) +
+          ' (' + Math.round((agora - foraDesde) / 1000) + ' s), voltou sozinho';
+        foraDesde = null;
+        carregar();
+      }
+      alvo.textContent = '\u25CF Servidor ' + s.servidor + ' no ar \u00B7 verificado às ' + hora(agora) +
+        (ultimaQueda ? ' \u00B7 ' + ultimaQueda : '');
+      alvo.className = 'topo__conexao topo__conexao--ok';
+    }, function () {
+      if (!foraDesde) { foraDesde = new Date(); }
+      alvo.textContent = '\u25CF Servidor sem resposta desde ' + hora(foraDesde) + ' \u00B7 tentando de novo a cada 5 s';
+      alvo.className = 'topo__conexao topo__conexao--falha';
     });
   }
 
@@ -182,5 +208,7 @@
   alternador('btn-fonte', 'fonte-maior', 'ae-fonte');
   carregar();
   carregarServidor();
+  verificarConexao();
   setInterval(carregar, INTERVALO_MS);
+  setInterval(verificarConexao, INTERVALO_CONEXAO_MS);
 }());
