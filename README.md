@@ -186,8 +186,7 @@ citizentech-infra/
 ├── prompts.md                         registro do uso de IA (regra da GS)
 ├── docs/
 │   ├── roteiro-configuracao.md        passo a passo completo com comandos e saídas esperadas
-│   ├── ficha-citizentech.md           ficha detalhada e papel do servidor na arquitetura
-│   └── roteiro-video.md               roteiro do vídeo de até 7 minutos
+│   └── ficha-citizentech.md           ficha detalhada e papel do servidor na arquitetura
 ├── scripts/
 │   ├── 00-Config.ps1                  valores do ambiente (único arquivo a editar)
 │   ├── lib/Comum.ps1                  funções de apoio (evidências, nomes por SID, contadores)
@@ -208,7 +207,7 @@ citizentech-infra/
 
 ## 8. Vídeo de demonstração
 
-✏️ Link: https://youtu.be/PREENCHER (até 7 minutos) · Roteiro: [docs/roteiro-video.md](docs/roteiro-video.md)
+✏️ Link: https://youtu.be/PREENCHER (até 7 minutos)
 
 ---
 
