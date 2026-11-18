@@ -29,11 +29,11 @@ Este documento é o passo a passo usado para montar a infraestrutura. Ele segue 
 | Item | Valor usado |
 |---|---|
 | Hipervisor | VirtualBox, VMware Workstation, Hyper-V ou Azure |
-| VM | Windows Server 2022 (ou 2019) **Desktop Experience**, 2 vCPU, 4 GB RAM, disco de 60 GB |
+| VM | Windows Server 2022 (ou 2019) **Desktop Experience**, 1 ou 2 vCPU, 4 GB RAM, disco de 60 GB (veja o aviso sobre Hyper-V no item 8) |
 | Rede | Adaptador em modo **Bridge** |
 | Hostname | `SRV-CITIZENTECH` |
 | Domínio | `citizentech.local` |
-| IP | `192.168.1.10/24`, gateway `192.168.1.1` (ajuste para a sua rede) |
+| IP | `192.168.200.230/24`, gateway `192.168.200.1` (os da nossa rede; ajuste para a sua no `00-Config.ps1`) |
 
 Anote em um bloco de notas **fora do repositório**: senha do Administrador, senha DSRM e senha dos usuários de teste.
 
@@ -100,15 +100,15 @@ Feito no item 0.2.
 ```powershell
 Get-NetAdapter                                                     # descobre o ifIndex da placa conectada
 Set-NetIPInterface -InterfaceIndex 12 -AddressFamily IPv4 -Dhcp Disabled
-New-NetIPAddress -InterfaceIndex 12 -IPAddress 192.168.1.10 -PrefixLength 24 -DefaultGateway 192.168.1.1
-Set-DnsClientServerAddress -InterfaceIndex 12 -ServerAddresses 192.168.1.10
+New-NetIPAddress -InterfaceIndex 6 -IPAddress 192.168.200.230 -PrefixLength 24 -DefaultGateway 192.168.200.1
+Set-DnsClientServerAddress -InterfaceIndex 6 -ServerAddresses 192.168.200.230
 Set-TimeZone -Id 'E. South America Standard Time'                  # logs com horário de Brasília
 Rename-Computer -NewName 'SRV-CITIZENTECH' -Restart
 ```
 
 O script escolhe sozinho o `ifIndex`, mostra a configuração atual, pede confirmação e reinicia.
 
-**Saída esperada**: tabela com `IPAddress 192.168.1.10`, `PrefixLength 24`, `InterfaceIndex` e `AddressFamily IPv4`; depois o reinício.
+**Saída esperada**: tabela com `IPAddress 192.168.200.230`, `PrefixLength 24`, `InterfaceIndex` e `AddressFamily IPv4`; depois o reinício.
 
 O print do `ipconfig /all` (`01-rede/ipconfig-all.png`) fica melhor **depois** do script 03, quando aparecem o hostname novo e o sufixo `citizentech.local`. O script 03 salva `01-rede/ipconfig-all.txt`.
 
@@ -146,14 +146,16 @@ Depois do reinício faça logon como **`CITIZENTECH\Administrator`** (mesma senh
 ```powershell
 # DNS: internet, zona reversa e nome da aplicação
 Set-DnsServerForwarder -IPAddress 8.8.8.8, 1.1.1.1
-Add-DnsServerPrimaryZone -NetworkId '192.168.1.0/24' -ReplicationScope Forest
-Add-DnsServerResourceRecordPtr -ZoneName '1.168.192.in-addr.arpa' -Name '10' -PtrDomainName 'srv-citizentech.citizentech.local.'
-Add-DnsServerResourceRecordA -ZoneName 'citizentech.local' -Name 'alertaencosta' -IPv4Address 192.168.1.10
+Add-DnsServerPrimaryZone -NetworkId '192.168.200.0/24' -ReplicationScope Forest
+Add-DnsServerResourceRecordPtr -ZoneName '200.168.192.in-addr.arpa' -Name '230' -PtrDomainName 'srv-citizentech.citizentech.local.'
+Add-DnsServerResourceRecordA -ZoneName 'citizentech.local' -Name 'alertaencosta' -IPv4Address 192.168.200.230
 
 # 3.4 validação
 ipconfig /all
 Get-ADDomain | Select-Object Name, DNSRoot, NetBIOSName, DomainMode
-nslookup srv-citizentech.citizentech.local
+# depois da promoção o Windows aponta o DNS para 127.0.0.1/::1; voltamos para o IP do servidor
+Set-DnsClientServerAddress -InterfaceIndex 6 -ServerAddresses 192.168.200.230
+nslookup srv-citizentech.citizentech.local 192.168.200.230
 Get-DnsServerZone
 
 # 3.5 OU, grupos e usuários
@@ -173,9 +175,9 @@ A zona reversa é um extra: sem ela o `nslookup` mostra `Servidor: UnKnown`.
 
 **Saída esperada**
 
-- `ipconfig /all`: *Nome do host* `SRV-CITIZENTECH`, *Sufixo DNS primário* `citizentech.local`, DHCP desabilitado, IP, máscara, gateway e DNS `192.168.1.10`.
+- `ipconfig /all`: *Nome do host* `SRV-CITIZENTECH`, *Sufixo DNS primário* `citizentech.local`, DHCP desabilitado, IP, máscara, gateway e DNS `192.168.200.230`.
 - `Get-ADDomain`: `Name citizentech`, `DNSRoot citizentech.local`.
-- `nslookup`: servidor `srv-citizentech.citizentech.local`, endereço `192.168.1.10`.
+- `nslookup`: servidor `srv-citizentech.citizentech.local`, endereço `192.168.200.230`.
 - `Get-DnsServerZone`: `citizentech.local` como **Primary**, integrada ao AD, e a zona reversa.
 - Usuários `ana.souza`, `carlos.lima` e `beatriz.alves` com `Enabled True`; membros corretos nos dois grupos.
 
@@ -219,22 +221,23 @@ Get-WebAppPoolState -Name 'CitizenTechPool'
 Invoke-WebRequest -Uri 'http://localhost' -UseBasicParsing | Select-Object StatusCode
 ```
 
-O script também grava `servidor.json` na pasta do site; o rodapé da página mostra *"Servido por SRV-CITIZENTECH (192.168.1.10) · IIS 10.0 · site CitizenTech / pool CitizenTechPool"*, o que prova no print que a página vem do IIS da VM.
+O script também grava `servidor.json` na pasta do site; o rodapé da página mostra *"Servido por SRV-CITIZENTECH (192.168.200.230) · IIS 10.0 · site CitizenTech / pool CitizenTechPool"*, o que prova no print que a página vem do IIS da VM.
 
 O `web.config` do site define `index.html` como documento padrão, os tipos MIME `.json` e `.svg`, desliga a listagem de pastas e adiciona cabeçalhos de segurança.
 
 **Saída esperada**: site `CitizenTech` com `State Started`, `PhysicalPath C:\inetpub\citizentech`, `ApplicationPool CitizenTechPool`; pool `Started`; `StatusCode 200`.
 
-**Prints**: `03-iis/get-website.png`, `03-iis/get-webapppoolstate.png` (com o `Invoke-WebRequest`) e `03-iis/navegador-site.png` – navegador de **outra máquina** (o seu computador) abrindo `http://192.168.1.10` com a página do AlertaEncosta e o rodapé visível.
+**Prints**: `03-iis/get-website.png`, `03-iis/get-webapppoolstate.png` (com o `Invoke-WebRequest`) e `03-iis/navegador-site.png` – navegador de **outra máquina** (o seu computador) abrindo `http://192.168.200.230` com a página do AlertaEncosta e o rodapé visível.
 
 ### 4.4 Permissões NTFS da pasta do site
 
 ```powershell
-$acl = (Get-Item 'C:\inetpub\citizentech').GetAccessControl('Access')
+$pasta = Get-Item 'C:\inetpub\citizentech'
+$acl = $pasta.GetAccessControl('Access')
 $regra = New-Object System.Security.AccessControl.FileSystemAccessRule('IIS_IUSRS','ReadAndExecute','ContainerInherit,ObjectInherit','None','Allow')
 $acl.SetAccessRule($regra)
 # o script adiciona também IUSR (leitura, acesso anônimo) e GG_CitizenTech_Admins (alteração, quem publica)
-Set-Acl -Path 'C:\inetpub\citizentech' -AclObject $acl
+$pasta.SetAccessControl($acl)     # grava só a DACL (equivale ao Set-Acl do roteiro, sem tocar na auditoria)
 Get-Acl 'C:\inetpub\citizentech' | Format-List
 ```
 
@@ -263,7 +266,7 @@ No Windows em português o grupo se chama *Usuários do domínio*; o script desc
 
 **Saída esperada**: compartilhamento `CitizenTech` com `Path C:\Shares\CitizenTech`; acesso Full para admins e Read para usuários do domínio.
 
-**Prints**: `04-ntfs-gpo/get-smbshare.png` e `04-ntfs-gpo/acesso-share-cliente.png`: no seu computador, Explorador de Arquivos > `\\192.168.1.10\CitizenTech` (ou `\\SRV-CITIZENTECH\CitizenTech`), credencial `CITIZENTECH\ana.souza`, mostrando o arquivo `LEIA-ME-plano-de-contingencia-SIMULADO.txt`.
+**Prints**: `04-ntfs-gpo/get-smbshare.png` e `04-ntfs-gpo/acesso-share-cliente.png`: no seu computador, Explorador de Arquivos > `\\192.168.200.230\CitizenTech` (ou `\\SRV-CITIZENTECH\CitizenTech`), credencial `CITIZENTECH\ana.souza`, mostrando o arquivo `LEIA-ME-plano-de-contingencia-SIMULADO.txt`.
 
 ---
 
@@ -290,13 +293,13 @@ Get-GPO -All
 
 ```powershell
 # no cliente, como administrador local
-Set-DnsClientServerAddress -InterfaceIndex <ifIndex> -ServerAddresses 192.168.1.10
+Set-DnsClientServerAddress -InterfaceIndex <ifIndex> -ServerAddresses 192.168.200.230
 Add-Computer -DomainName citizentech.local -Credential CITIZENTECH\Administrator -Restart
 ```
 
 Depois faça logon como `CITIZENTECH\carlos.lima`, rode `gpresult /r /scope user` (a GPO aparece em *Objetos de Política de Grupo aplicados*) e tente abrir o Painel de Controle.
 
-**Opção 2 – sem VM cliente (somente laboratório)**: permita logon local dos operadores no próprio servidor.
+**Opção 2 – sem VM cliente (somente laboratório, a que usamos)**: permita logon local dos operadores no próprio servidor. O script `scripts\Permitir-Logon-Operadores.ps1` faz os passos 1 a 3 por PowerShell (`Backup-GPO`, ajuste do direito `SeInteractiveLogonRight`, `Import-GPO`) e `.\Permitir-Logon-Operadores.ps1 -Remover` desfaz no passo 5. Pela interface:
 
 1. `gpmc.msc` > Floresta > Domínios > citizentech.local > **Domain Controllers** > *Default Domain Controllers Policy* > Editar.
 2. *Configuração do Computador > Políticas > Configurações do Windows > Configurações de Segurança > Políticas Locais > Atribuição de Direitos de Usuário* > **Permitir logon local**.
@@ -314,7 +317,7 @@ Enable-NetFirewallRule -Group '@FirewallAPI.dll,-28752'     # grupo "Área de Tr
 
 Usamos RDP com NLA (autenticação antes de abrir a sessão). Não instalamos o Host de Sessão do RDS porque ele não é recomendado em um controlador de domínio e o roteiro aceita o RDP.
 
-**Print** `04-ntfs-gpo/rdp-conexao.png`: no seu computador, `mstsc /v:192.168.1.10`, usuário `CITIZENTECH\Administrator`; na sessão remota abra o PowerShell e digite `hostname` (aparece `SRV-CITIZENTECH`).
+**Print** `04-ntfs-gpo/rdp-conexao.png`: no seu computador, `mstsc /v:192.168.200.230`, usuário `CITIZENTECH\Administrator`; na sessão remota abra o PowerShell e digite `hostname` (aparece `SRV-CITIZENTECH`).
 
 ### 5.3 DFS
 
@@ -354,10 +357,11 @@ auditpol /get /category:*
 Limit-EventLog -LogName Security -MaximumSize 256MB
 
 # regra de auditoria (SACL) na pasta do site; o script faz o mesmo na pasta compartilhada
-$acl = (Get-Item 'C:\inetpub\citizentech').GetAccessControl('Audit')
+$pasta = Get-Item 'C:\inetpub\citizentech'
+$acl = $pasta.GetAccessControl('Audit')
 $regra = New-Object System.Security.AccessControl.FileSystemAuditRule('Everyone','ReadData, WriteData','ContainerInherit,ObjectInherit','None','Success,Failure')
 $acl.AddAuditRule($regra)
-Set-Acl -Path 'C:\inetpub\citizentech' -AclObject $acl
+$pasta.SetAccessControl($acl)     # NÃO use Set-Acl com um objeto lido só com 'Audit': ele zera as permissões (DACL nula)
 
 Get-WinEvent -LogName Security -MaxEvents 20 | Select-Object TimeCreated, Id, Message
 netsh http flush logbuffer                                  # força o IIS a gravar o log agora
@@ -487,7 +491,7 @@ Por que dois mecanismos: a aba Recuperação do Windows só age quando o serviç
 **Prints**
 
 - `06-teste-falha/teste-falha-etapas.png`: as cinco etapas no terminal (cenário Servico ou Crash).
-- `06-teste-falha/navegador-voltou.png`: navegador do seu computador recarregando `http://192.168.1.10` depois da recuperação.
+- `06-teste-falha/navegador-voltou.png`: navegador do seu computador recarregando `http://192.168.200.230` depois da recuperação.
 - `06-teste-falha/recuperacao-log.png`: `Get-Content C:\Scripts\logs\recuperacao.log` depois dos cenários Servico e Pool.
 
 ---
@@ -516,7 +520,7 @@ Copia para `evidencias\` os logs da operação (`alertas.log`, `recursos.csv`, `
 
 ### Levar as evidências para o repositório
 
-- **Prints**: tire no seu computador (Win+Shift+S sobre a janela da VM) e salve direto em `evidencias/<pasta>/` com o nome indicado em [evidencias/README.md](../evidencias/README.md). Os links do README principal já apontam para esses nomes.
+- **Prints**: na VM, rode `.\Tirar-Print.ps1 <pasta>\<arquivo>.png -Atraso 5` e deixe a janela certa na frente; o PNG vai para `evidencias/<pasta>/` com o nome indicado em [evidencias/README.md](../evidencias/README.md). Prints do seu computador (navegador, Explorador, RDP): Win+Shift+S. Os links do README principal já apontam para esses nomes.
 - **Saídas `.txt` e logs**: copie `C:\Temp\evidencias-citizentech.zip` para o seu computador (pasta compartilhada do hipervisor, arrastar e soltar ou upload no GitHub pelo navegador da VM em *Add file > Upload files*) e extraia na raiz do repositório (o .zip já contém a pasta `evidencias`; confirme a substituição dos arquivos).
 - Faça o commit e o push. Confira no GitHub se os links da tabela de critérios abrem.
 
@@ -568,12 +572,12 @@ Se a equipe preferir publicar a API REST do AlertaEncosta (disciplina de SOA) em
 | *"não pode ser carregado porque a execução de scripts foi desabilitada"* ou aviso de arquivo baixado | política de execução / marca de download | `Set-ExecutionPolicy -Scope Process Bypass -Force` e `Get-ChildItem C:\citizentech-infra -Recurse \| Unblock-File` |
 | Script 01 diz que não há adaptador conectado | placa da VM desconectada ou Bridge sem rede | confira a rede da VM; em Wi-Fi use Host-only (item 0.2) |
 | `New-NetIPAddress`: *Instance already exists* | IP antigo ainda na placa | o script remove antes; manualmente: `Remove-NetIPAddress -InterfaceIndex <n> -Confirm:$false` |
-| `nslookup` falha ou mostra `UnKnown` | servidor não aponta para si mesmo / sem zona reversa | `Set-DnsClientServerAddress -InterfaceIndex <n> -ServerAddresses 192.168.1.10`; rode de novo o 03 (cria a zona reversa) |
+| `nslookup` falha ou mostra `UnKnown` | servidor não aponta para si mesmo / sem zona reversa | `Set-DnsClientServerAddress -InterfaceIndex <n> -ServerAddresses 192.168.200.230`; rode de novo o 03 (cria a zona reversa) |
 | `Get-ADDomain`: *Unable to find a default server* logo após o boot | AD ainda iniciando | aguarde 1-2 minutos (o script 03 já espera) |
 | Erro 500.19 no IIS | `web.config` inválido ou módulo ausente | confira o `web.config`; no Caminho B reinstale o Hosting Bundle/HttpPlatformHandler |
 | Erro 401.3 | falta permissão NTFS para `IIS_IUSRS`/`IUSR` | rode de novo o 04 |
 | Site não inicia (`State Stopped`) | outro site usando a porta 80 | `Get-Website`; remova/pare o *Default Web Site* |
-| Site não abre pelo IP em outra máquina | firewall da porta 80 / rede | `New-NetFirewallRule -DisplayName 'HTTP' -Direction Inbound -Protocol TCP -LocalPort 80 -Action Allow`; teste `Test-NetConnection 192.168.1.10 -Port 80` no seu computador |
+| Site não abre pelo IP em outra máquina | firewall da porta 80 / rede | `New-NetFirewallRule -DisplayName 'HTTP' -Direction Inbound -Protocol TCP -LocalPort 80 -Action Allow`; teste `Test-NetConnection 192.168.200.230 -Port 80` no seu computador |
 | `logman`: contador não encontrado | nome do contador no idioma errado | use o script 07 (traduz sozinho); confira `05-monitoramento/contadores.txt` |
 | Coletores parados depois de reiniciar | perfmon não inicia conjuntos sozinho | a tarefa `CitizenTech_Iniciar_Coletores` resolve; manual: `logman start CitizenTech_Monitor` |
 | Agendador sem histórico | histórico desligado por padrão | `wevtutil set-log Microsoft-Windows-TaskScheduler/Operational /enabled:true` (o 07 já faz) |
@@ -581,4 +585,6 @@ Se a equipe preferir publicar a API REST do AlertaEncosta (disciplina de SOA) em
 | Pool para sozinho depois de várias quedas | *Rapid-Fail Protection* | o 08 desliga (`failure.rapidFailProtection = False`) |
 | Teste de falha não recupera em 30 s | `Stop-Service` não aciona a aba Recuperação | é esperado: a tarefa de 1 min religa; use `-Cenario Crash` para ver a recuperação do Windows em segundos |
 | `Invoke-WebRequest`: erro do mecanismo do Internet Explorer | IE não inicializado | sempre use `-UseBasicParsing` |
-| Usuário comum não consegue logon no servidor | controlador de domínio só permite administradores | veja as opções do item 5.1 |
+| Usuário comum não consegue logon no servidor | controlador de domínio só permite administradores | veja as opções do item 5.1 (`scripts\Permitir-Logon-Operadores.ps1` faz a opção 2 e desfaz com `-Remover`) |
+| Depois do script 06 o site dá erro 500.19 (código Win32 5) ou 401.3 e `icacls` mostra *No permissions are set* | versão antiga do 06 gravava a auditoria com `Set-Acl` e zerava a DACL | já corrigido (usa `SetAccessControl`); para reparar: `icacls C:\inetpub\citizentech /reset /T /C` e `icacls C:\Shares\CitizenTech /reset /T /C`, depois rode de novo 04, 05 e 06 |
+| VM do VirtualBox congela 1-2 minutos de tempos em tempos; o log (*Máquina > Exibir Log*) mostra `fall back to NEM`, `TM: Giving up catch-up attempt` e `AHCI#0: Port 0 reset` | o Hyper-V está ativo no computador host e o VirtualBox roda sobre ele (modo NEM); com 2 vCPUs a VM trava esperando um processador pelo outro | foi o nosso caso: desligue a VM, deixe **1 vCPU** em *Configurações > Sistema > Processador* e ligue *Usar cache de E/S do hospedeiro* em *Armazenamento > Controladora SATA* |
