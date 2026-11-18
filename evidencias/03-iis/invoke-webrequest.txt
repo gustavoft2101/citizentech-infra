@@ -1,0 +1,28 @@
+﻿==== Invoke-WebRequest ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:58
+Comando  : foreach ($endereco in @('http://localhost', "http://$($Config.IP)", "http://$($Config.NomeDnsApp).$($Config.Dominio)")) {
+        $r = Invoke-WebRequest -Uri $endereco -UseBasicParsing
+        "{0,-45} StatusCode {1} {2}" -f $endereco, $r.StatusCode, $r.StatusDescription
+    }
+    ''
+    'Conteúdo de /servidor.json (gerado na publicação):'
+    (Invoke-WebRequest -Uri 'http://localhost/servidor.json' -UseBasicParsing).Content
+----------------------------------------------------------------------
+http://localhost                              StatusCode 200 OK
+http://192.168.200.230                        StatusCode 200 OK
+http://alertaencosta.citizentech.local        StatusCode 200 OK
+
+Conteúdo de /servidor.json (gerado na publicação):
+{
+    "servidor":  "SRV-CITIZENTECH",
+    "dominio":  "citizentech.local",
+    "ip":  "192.168.200.230",
+    "iis":  "Version 10.0",
+    "sistema":  "Microsoft Windows Server 2022 Standard Evaluation",
+    "site":  "CitizenTech",
+    "pool":  "CitizenTechPool",
+    "hospedagem":  "Caminho A - aplicacao estatica (HTML, CSS, JavaScript)",
+    "publicadoEm":  "2026-11-18 12:14:52"
+}
+

@@ -1,0 +1,18 @@
+﻿==== Get-WebAppPoolState e runtime do pool ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:57
+Comando  : "Pool $($Config.Pool): $((Get-WebAppPoolState -Name $Config.Pool).Value)"
+    Get-Item "IIS:\AppPools\$($Config.Pool)" |
+        Select-Object name, state, managedRuntimeVersion, managedPipelineMode | Format-List
+----------------------------------------------------------------------
+Pool CitizenTechPool: Started
+
+
+name                  : CitizenTechPool
+state                 : Started
+managedRuntimeVersion : 
+managedPipelineMode   : Integrated
+
+
+
+

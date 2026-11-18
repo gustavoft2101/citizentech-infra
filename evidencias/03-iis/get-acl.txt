@@ -1,0 +1,44 @@
+﻿==== Get-Acl da pasta do site ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:55
+Comando  : Get-Acl $Config.PastaSite | Format-List Path, Owner, AccessToString
+    (Get-Acl $Config.PastaSite).Access |
+        Format-Table IdentityReference, FileSystemRights, AccessControlType, IsInherited -AutoSize
+----------------------------------------------------------------------
+
+
+Path           : Microsoft.PowerShell.Core\FileSystem::C:\inetpub\citizentech
+Owner          : BUILTIN\Administrators
+AccessToString : NT AUTHORITY\IUSR Allow  ReadAndExecute, Synchronize
+                 BUILTIN\IIS_IUSRS Allow  ReadAndExecute, Synchronize
+                 CITIZENTECH\GG_CitizenTech_Admins Allow  Modify, Synchronize
+                 NT SERVICE\TrustedInstaller Allow  FullControl
+                 NT SERVICE\TrustedInstaller Allow  268435456
+                 NT AUTHORITY\SYSTEM Allow  FullControl
+                 NT AUTHORITY\SYSTEM Allow  268435456
+                 BUILTIN\Administrators Allow  FullControl
+                 BUILTIN\Administrators Allow  268435456
+                 BUILTIN\Users Allow  ReadAndExecute, Synchronize
+                 BUILTIN\Users Allow  -1610612736
+                 CREATOR OWNER Allow  268435456
+
+
+
+
+IdentityReference                            FileSystemRights AccessControlType IsInherited
+-----------------                            ---------------- ----------------- -----------
+NT AUTHORITY\IUSR                 ReadAndExecute, Synchronize             Allow       False
+BUILTIN\IIS_IUSRS                 ReadAndExecute, Synchronize             Allow       False
+CITIZENTECH\GG_CitizenTech_Admins         Modify, Synchronize             Allow       False
+NT SERVICE\TrustedInstaller                       FullControl             Allow        True
+NT SERVICE\TrustedInstaller                         268435456             Allow        True
+NT AUTHORITY\SYSTEM                               FullControl             Allow        True
+NT AUTHORITY\SYSTEM                                 268435456             Allow        True
+BUILTIN\Administrators                            FullControl             Allow        True
+BUILTIN\Administrators                              268435456             Allow        True
+BUILTIN\Users                     ReadAndExecute, Synchronize             Allow        True
+BUILTIN\Users                                     -1610612736             Allow        True
+CREATOR OWNER                                       268435456             Allow        True
+
+
+

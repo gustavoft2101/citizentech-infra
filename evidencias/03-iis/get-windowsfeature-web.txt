@@ -1,0 +1,29 @@
+﻿==== Recursos Web-* instalados ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:52
+Comando  : Get-WindowsFeature -Name Web-* | Where-Object Installed | Format-Table Name, DisplayName, InstallState -AutoSize
+----------------------------------------------------------------------
+
+Name                 DisplayName                      InstallState
+----                 -----------                      ------------
+Web-Server           Web Server (IIS)                    Installed
+Web-WebServer        Web Server                          Installed
+Web-Common-Http      Common HTTP Features                Installed
+Web-Default-Doc      Default Document                    Installed
+Web-Dir-Browsing     Directory Browsing                  Installed
+Web-Http-Errors      HTTP Errors                         Installed
+Web-Static-Content   Static Content                      Installed
+Web-Health           Health and Diagnostics              Installed
+Web-Http-Logging     HTTP Logging                        Installed
+Web-Request-Monitor  Request Monitor                     Installed
+Web-Http-Tracing     Tracing                             Installed
+Web-Performance      Performance                         Installed
+Web-Stat-Compression Static Content Compression          Installed
+Web-Security         Security                            Installed
+Web-Filtering        Request Filtering                   Installed
+Web-Mgmt-Tools       Management Tools                    Installed
+Web-Mgmt-Console     IIS Management Console              Installed
+Web-Scripting-Tools  IIS Management Scripts and Tools    Installed
+
+
+

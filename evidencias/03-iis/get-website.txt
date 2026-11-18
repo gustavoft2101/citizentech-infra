@@ -1,0 +1,23 @@
+﻿==== Get-Website ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:57
+Comando  : Get-Website -Name $Config.Site | Format-List Name, ID, State, PhysicalPath, ApplicationPool
+    Get-WebBinding -Name $Config.Site | Format-Table protocol, bindingInformation -AutoSize
+----------------------------------------------------------------------
+
+
+name            : CitizenTech
+id              : 1
+state           : Started
+physicalPath    : C:\inetpub\citizentech
+applicationPool : CitizenTechPool
+
+
+
+
+protocol bindingInformation
+-------- ------------------
+http     *:80:             
+
+
+

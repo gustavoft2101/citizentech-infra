@@ -1,0 +1,18 @@
+﻿==== Arquivos publicados ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:52
+Comando  : Get-ChildItem $Config.PastaSite -Recurse -File | Select-Object FullName, Length, LastWriteTime | Format-Table -AutoSize
+----------------------------------------------------------------------
+
+FullName                                 Length LastWriteTime      
+--------                                 ------ -------------      
+C:\inetpub\citizentech\index.html          3047 17/11/2026 21:43:42
+C:\inetpub\citizentech\servidor.json        392 18/11/2026 12:14:52
+C:\inetpub\citizentech\web.config          1472 17/11/2026 21:43:43
+C:\inetpub\citizentech\css\estilo.css      6880 17/11/2026 21:43:40
+C:\inetpub\citizentech\data\setores.json   2280 17/11/2026 21:43:40
+C:\inetpub\citizentech\img\icone.svg       8226 17/11/2026 21:43:41
+C:\inetpub\citizentech\js\app.js           7845 18/11/2026 11:44:13
+
+
+

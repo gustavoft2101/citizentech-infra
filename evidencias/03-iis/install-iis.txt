@@ -1,0 +1,13 @@
+﻿==== Install-WindowsFeature Web-Server ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-18 12:14:51
+Comando  : Install-WindowsFeature -Name $recursosIIS -IncludeManagementTools |
+        Format-Table Success, RestartNeeded, ExitCode, FeatureResult -AutoSize -Wrap
+----------------------------------------------------------------------
+
+Success RestartNeeded       ExitCode FeatureResult
+------- -------------       -------- -------------
+   True            No NoChangeNeeded {}           
+
+
+
