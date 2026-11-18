@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AlertaEncosta · Vila Brasilândia</title>
+  <meta name="description" content="Alertas de chuva forte e rotas seguras para quem mora em áreas de risco na Vila Brasilândia. Protótipo acadêmico com dados simulados.">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="topo__marca">
+      <img src="img/icone.svg" alt="" width="44" height="44">
+      <div>
+        <strong class="topo__nome">AlertaEncosta</strong>
+        <span class="topo__local">Vila Brasilândia · São Paulo</span>
+      </div>
+    </div>
+    <div class="topo__acess" role="group" aria-label="Acessibilidade">
+      <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+      <button type="button" id="btn-fonte" aria-pressed="false">A+ Letra maior</button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section id="faixa" class="faixa faixa--carregando" role="status" aria-live="polite">
+      <p class="faixa__titulo">Carregando a situação dos setores…</p>
+    </section>
+
+    <section aria-labelledby="titulo-setores">
+      <div class="secao__cabecalho">
+        <h2 id="titulo-setores">Situação por setor</h2>
+        <p class="nota">Atualizado às <time id="atualizado">--:--</time> · dados simulados</p>
+      </div>
+      <div id="setores" class="grade"></div>
+    </section>
+
+    <section aria-labelledby="titulo-pontos">
+      <h2 id="titulo-pontos">Pontos de apoio</h2>
+      <ul id="pontos" class="pontos"></ul>
+    </section>
+
+    <section class="oque" aria-labelledby="titulo-oque">
+      <h2 id="titulo-oque">Se o alerta do seu setor for ALTO</h2>
+      <ol class="oque__lista">
+        <li><strong>Saia de casa agora</strong> pela rota indicada no seu setor. Não espere a água ou a terra chegar.</li>
+        <li><strong>Ajude quem precisa:</strong> idosos, crianças e pessoas com deficiência saem primeiro.</li>
+        <li><strong>Leve só o essencial:</strong> documentos, remédios, celular e carregador.</li>
+        <li><strong>Viu trincas, estalos ou água barrenta?</strong> Avise a Defesa Civil pelo app ou pelo telefone 199.</li>
+        <li><strong>Só volte</strong> quando a Defesa Civil liberar o setor.</li>
+      </ol>
+      <p class="emergencia">
+        <span>Defesa Civil <strong>199</strong></span>
+        <span>Bombeiros <strong>193</strong></span>
+        <span>SAMU <strong>192</strong></span>
+      </p>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p id="servidor" class="rodape__servidor">Servidor: carregando…</p>
+    <p>Projeto acadêmico FIAP · Global Solution 2026.2 · CitizenTech. Todos os dados desta página são simulados; nenhum dado pessoal é coletado (LGPD).</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AlertaEncosta">
+  <rect width="64" height="64" rx="14" fill="#0b3d5c"/>
+  <path d="M6 52 L26 30 L38 40 L58 18 L58 58 L6 58 Z" fill="#2e7d4f"/>
+  <path d="M22 40 L30 33 L38 40 L38 50 L22 50 Z" fill="#f4f1ea"/>
+  <rect x="28" y="43" width="5" height="7" fill="#0b3d5c"/>
+  <path d="M46 6 C46 6 39 15 39 19.5 A7 7 0 0 0 53 19.5 C53 15 46 6 46 6 Z" fill="#5ec8f2"/>
+</svg>

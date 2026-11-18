@@ -1,0 +1,9 @@
+# Scripts PowerShell com quebra de linha do Windows
+*.ps1   text eol=crlf
+*.config text eol=crlf
+*.md    text
+*.html  text
+*.css   text
+*.js    text
+*.json  text
+*.png   binary

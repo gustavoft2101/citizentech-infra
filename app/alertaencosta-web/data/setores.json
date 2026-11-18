@@ -1,0 +1,67 @@
+{
+  "atualizadoEm": "2026-11-17T18:00:00-03:00",
+  "fonte": "Dados simulados para fins acadêmicos. Nenhum dado pessoal real.",
+  "setores": [
+    {
+      "id": "BR-01",
+      "nome": "Encosta do Córrego",
+      "risco": "alto",
+      "probabilidade": 0.82,
+      "chuva1h": 38,
+      "chuva24h": 96,
+      "umidadeSolo": 91,
+      "nivelCorrego": 142,
+      "moradoresCadastrados": 312,
+      "precisamAjuda": 14,
+      "pontoApoio": "PA-1",
+      "rota": "Desça pela escadaria até a rua de baixo e siga 400 m à esquerda até o ponto de apoio PA-1."
+    },
+    {
+      "id": "BR-02",
+      "nome": "Morro da Caixa d'Água",
+      "risco": "medio",
+      "probabilidade": 0.47,
+      "chuva1h": 22,
+      "chuva24h": 61,
+      "umidadeSolo": 74,
+      "nivelCorrego": 88,
+      "moradoresCadastrados": 205,
+      "precisamAjuda": 6,
+      "pontoApoio": "PA-2",
+      "rota": "Siga pela rua principal no sentido do comércio (600 m) até o ponto de apoio PA-2."
+    },
+    {
+      "id": "BR-03",
+      "nome": "Várzea da Avenida",
+      "risco": "medio",
+      "probabilidade": 0.39,
+      "chuva1h": 19,
+      "chuva24h": 55,
+      "umidadeSolo": 63,
+      "nivelCorrego": 104,
+      "moradoresCadastrados": 178,
+      "precisamAjuda": 9,
+      "pontoApoio": "PA-2",
+      "rota": "Vá para a parte alta pela travessa ao lado da praça e siga até o ponto de apoio PA-2."
+    },
+    {
+      "id": "BR-04",
+      "nome": "Alto da Escola",
+      "risco": "baixo",
+      "probabilidade": 0.12,
+      "chuva1h": 8,
+      "chuva24h": 31,
+      "umidadeSolo": 41,
+      "nivelCorrego": 35,
+      "moradoresCadastrados": 96,
+      "precisamAjuda": 2,
+      "pontoApoio": "PA-3",
+      "rota": "Fique atento aos avisos. Se mudar para alto, siga 200 m até o ponto de apoio PA-3."
+    }
+  ],
+  "pontosApoio": [
+    { "id": "PA-1", "nome": "Escola municipal (simulada)", "endereco": "Rua das Flores, 120 (endereço simulado)", "capacidade": 250, "acessivel": true },
+    { "id": "PA-2", "nome": "Centro comunitário (simulado)", "endereco": "Avenida Central, 980 (endereço simulado)", "capacidade": 180, "acessivel": true },
+    { "id": "PA-3", "nome": "Salão paroquial (simulado)", "endereco": "Rua do Mirante, 45 (endereço simulado)", "capacidade": 90, "acessivel": false }
+  ]
+}
