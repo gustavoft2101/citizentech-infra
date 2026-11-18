@@ -1,0 +1,24 @@
+﻿==== Configuração IP aplicada ====
+Servidor : WIN-VQ5528BKBSA
+Data/hora: 2026-11-18 06:07:07
+Comando  : Get-NetIPConfiguration -InterfaceIndex $indice | Format-List $camposIP
+    Get-NetIPInterface -InterfaceIndex $indice -AddressFamily IPv4 |
+        Format-Table InterfaceAlias, AddressFamily, Dhcp -AutoSize
+----------------------------------------------------------------------
+
+
+InterfaceAlias     : Ethernet
+IPv4Address        : 192.168.200.230
+PrefixLength       : 24
+IPv4DefaultGateway : 192.168.200.1
+DNSServer          : 192.168.200.230
+
+
+
+
+InterfaceAlias AddressFamily     Dhcp
+-------------- -------------     ----
+Ethernet                IPv4 Disabled
+
+
+

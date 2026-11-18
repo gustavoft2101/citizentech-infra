@@ -1,0 +1,17 @@
+﻿==== Versão do sistema operacional ====
+Servidor : WIN-VQ5528BKBSA
+Data/hora: 2026-11-18 06:06:52
+Comando  : Get-CimInstance Win32_OperatingSystem |
+        Format-List Caption, Version, BuildNumber, OSArchitecture, InstallDate
+----------------------------------------------------------------------
+
+
+Caption        : Microsoft Windows Server 2022 Standard Evaluation
+Version        : 10.0.20348
+BuildNumber    : 20348
+OSArchitecture : 64-bit
+InstallDate    : 18/11/2026 05:51:50
+
+
+
+

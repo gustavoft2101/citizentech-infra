@@ -1,0 +1,12 @@
+﻿==== Adaptadores de rede ====
+Servidor : WIN-VQ5528BKBSA
+Data/hora: 2026-11-18 06:06:52
+Comando  : Get-NetAdapter | Format-Table Name, InterfaceDescription, Status, ifIndex, MacAddress -AutoSize
+----------------------------------------------------------------------
+
+Name     InterfaceDescription                 Status ifIndex MacAddress       
+----     --------------------                 ------ ------- ----------       
+Ethernet Intel(R) PRO/1000 MT Desktop Adapter Up           6 08-00-27-E0-2D-36
+
+
+
