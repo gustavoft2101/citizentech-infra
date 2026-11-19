@@ -12,7 +12,6 @@ Infraestrutura Windows Server que hospeda, monitora e recupera automaticamente o
 | Gabriel Machado Belardino | RM550121 |
 | Gustavo Franco Tárano | RM559616 |
 
-> ✏️ = campo que a equipe precisa preencher ou conferir depois de executar na VM.
 
 ---
 
