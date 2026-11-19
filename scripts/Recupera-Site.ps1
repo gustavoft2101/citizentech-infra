@@ -11,6 +11,8 @@
       2. Pool CitizenTechPool   -> sem ele o site responde 503
       3. Site CitizenTech
       4. Teste HTTP real        -> se ainda falhar, executa iisreset
+      5. API Java (Caminho B)   -> pool, site e GET /api/v1/setores; se falhar, recicla o pool
+                                   (o HttpPlatformHandler sobe o java.exe de novo)
 
     Só escreve no recuperacao.log quando alguma ação foi necessária (o log fica limpo
     e cada linha é um incidente). Cada recuperação também vira o evento 9101 no log
@@ -23,6 +25,9 @@ param(
     [string]$Site      = 'CitizenTech',
     [string]$Pool      = 'CitizenTechPool',
     [string]$Url       = 'http://localhost',
+    [string]$SiteApi   = 'AlertaEncostaAPI',
+    [string]$PoolApi   = 'AlertaEncostaApiPool',
+    [string]$UrlApi    = 'http://localhost:8080/api/v1/setores',
     [string]$PastaLogs = 'C:\Scripts\logs'
 )
 
@@ -42,8 +47,9 @@ function Registrar {
 }
 
 function Testar-Http {
+    param([string]$Endereco = $Url, [int]$Tempo = 10)
     try {
-        $r = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 10
+        $r = Invoke-WebRequest -Uri $Endereco -UseBasicParsing -TimeoutSec $Tempo
         return [int]$r.StatusCode
     } catch {
         if ($_.Exception.Response) { return [int]$_.Exception.Response.StatusCode }
@@ -106,4 +112,36 @@ else {
     $codigo = Testar-Http
     if ($codigo -eq 200) { Registrar "Recuperado apos iisreset. HTTP $codigo." 'Information' }
     else { Registrar "Falha persistente (HTTP $codigo). Verificar logs do IIS e o Visualizador de Eventos." 'Error' }
+}
+
+# ---------------------------------------------------------------- 5. API Java (Caminho B, script 04b)
+if (Test-Path "IIS:\Sites\$SiteApi") {
+    $acoesApi = 0
+    try {
+        if ((Get-WebAppPoolState -Name $PoolApi).Value -ne 'Started') {
+            Registrar "Pool $PoolApi (API) parado. Iniciando."
+            Start-WebAppPool -Name $PoolApi -ErrorAction Stop; $acoesApi++
+        }
+        if ((Get-Website -Name $SiteApi).State -ne 'Started') {
+            Registrar "Site $SiteApi (API) parado. Iniciando."
+            Start-Website -Name $SiteApi -ErrorAction Stop; $acoesApi++
+        }
+    } catch { Registrar "Erro ao verificar a API: $($_.Exception.Message)" 'Error' }
+
+    # o Spring Boot leva alguns segundos para subir: espera até 2 min antes de concluir que falhou
+    $limite = (Get-Date).AddMinutes(2)
+    do {
+        $codigoApi = Testar-Http -Endereco $UrlApi -Tempo 30
+        if ($codigoApi -ne 200) { Start-Sleep -Seconds 10 }
+    } until ($codigoApi -eq 200 -or (Get-Date) -gt $limite)
+
+    if ($codigoApi -ne 200) {
+        Registrar "API nao responde (HTTP $codigoApi). Reciclando o pool $PoolApi."
+        Restart-WebAppPool -Name $PoolApi -ErrorAction SilentlyContinue
+        $acoesApi++
+    } elseif ($acoesApi -gt 0) {
+        Registrar "Recuperado: API respondendo com HTTP $codigoApi." 'Information'
+    } else {
+        Write-Host "$(Get-Date -Format 'HH:mm:ss') API normal: GET /api/v1/setores HTTP 200." -ForegroundColor Green
+    }
 }

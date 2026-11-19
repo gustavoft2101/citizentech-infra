@@ -29,6 +29,8 @@ Invoke-Evidencia -Titulo '=== FICHA DA INFRAESTRUTURA ===' -Arquivo '08-validaca
         Format-Table Name, InstallState -AutoSize
     Get-Website | Format-Table Name, State, PhysicalPath -AutoSize
     "Pool $($Config.Pool): $((Get-WebAppPoolState -Name $Config.Pool).Value)"
+    "Pool $($Config.PoolApi): $((Get-WebAppPoolState -Name $Config.PoolApi).Value)"
+    "API GET /api/v1/setores: HTTP $((Invoke-WebRequest "http://localhost:$($Config.PortaApi)/api/v1/setores" -UseBasicParsing -TimeoutSec 60).StatusCode)"
     Get-Service W3SVC, WAS, DNS, NTDS, Dfs | Format-Table Name, Status -AutoSize
     Get-SmbShare | Format-Table Name, Path -AutoSize
     Get-GPO -All | Format-Table DisplayName, GpoStatus -AutoSize

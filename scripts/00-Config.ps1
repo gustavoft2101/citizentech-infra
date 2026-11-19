@@ -35,6 +35,16 @@ $Config = [ordered]@{
     PastaSite       = 'C:\inetpub\citizentech'
     NomeDnsApp      = 'alertaencosta'               # cria o nome alertaencosta.citizentech.local
 
+    # ---------- API AlertaEncosta (Java/Spring Boot, Caminho B) ----------
+    SiteApi         = 'AlertaEncostaAPI'
+    PoolApi         = 'AlertaEncostaApiPool'
+    PastaApi        = 'C:\inetpub\alertaencosta-api'
+    PortaApi        = 8080                          # http://<IP>:8080
+    NomeDnsApi      = 'api'                         # cria o nome api.citizentech.local (porta 80)
+    RepoApi         = 'https://github.com/gustavoft2101/alertaencosta-api'
+    PastaJava       = 'C:\Java'                     # JDK 21 e Maven
+    VersaoMaven     = '3.9.9'
+
     # ---------- File Server e DFS ----------
     Compartilhamento = 'CitizenTech'
     PastaShare       = 'C:\Shares\CitizenTech'
