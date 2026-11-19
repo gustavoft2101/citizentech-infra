@@ -1,0 +1,18 @@
+﻿==== Runtime instalado (java e mvn) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-19 16:46:02
+Comando  : cmd /c "`"$javaExe`" -version 2>&1"
+    if (Test-Path "$maven\bin\mvn.cmd") { cmd /c "`"$maven\bin\mvn.cmd`" -v 2>&1" }
+    Get-WebGlobalModule -Name httpPlatformHandler | Format-List Name, Image
+----------------------------------------------------------------------
+java version "21.0.10" 2026-01-20 LTS
+Java(TM) SE Runtime Environment (build 21.0.10+8-LTS-217)
+Java HotSpot(TM) 64-Bit Server VM (build 21.0.10+8-LTS-217, mixed mode, sharing)
+
+
+name  : httpPlatformHandler
+image : %SystemRoot%\system32\inetsrv\httpPlatformHandler.dll
+
+
+
+

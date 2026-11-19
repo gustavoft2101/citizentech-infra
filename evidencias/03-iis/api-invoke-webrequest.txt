@@ -1,0 +1,30 @@
+﻿==== Teste HTTP da API ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-19 16:47:09
+Comando  : foreach ($endereco in @("$urlBase/api/v1/setores", "http://$($Config.IP):$($Config.PortaApi)/v3/api-docs",
+                            "$urlBase/swagger-ui/index.html", "http://$cabecalho/api/v1/pontos-apoio")) {
+        try { $r = Invoke-WebRequest -Uri $endereco -UseBasicParsing -TimeoutSec 30; $c = "$($r.StatusCode) $($r.StatusDescription)" }
+        catch { $c = "ERRO $($_.Exception.Message)" }
+        "{0,-55} {1}" -f $endereco, $c
+    }
+    ''
+    'GET /api/v1/setores (dados do piloto da Vila Brasilândia):'
+    (Invoke-RestMethod "$urlBase/api/v1/setores" -UseBasicParsing).conteudo |
+        Format-Table id, codigo, nome, tipoRisco, nivelRiscoAtual -AutoSize
+----------------------------------------------------------------------
+http://localhost:8080/api/v1/setores                    200 OK
+http://192.168.200.230:8080/v3/api-docs                 200 OK
+http://localhost:8080/swagger-ui/index.html             200 OK
+http://api.citizentech.local/api/v1/pontos-apoio        200 OK
+
+GET /api/v1/setores (dados do piloto da Vila Brasilândia):
+
+id codigo nome                         tipoRisco    nivelRiscoAtual
+-- ------ ----                         ---------    ---------------
+ 1 BR-01  Encosta Jardim Damasceno     DESLIZAMENTO BAIXO          
+ 2 BR-02  Margem do Corrego Bananal    ALAGAMENTO   ALTO           
+ 3 BR-03  Encosta Vila Itaberaba       MISTO        MEDIO          
+ 4 BR-04  Jardim Princesa - Viela Alta DESLIZAMENTO BAIXO          
+
+
+

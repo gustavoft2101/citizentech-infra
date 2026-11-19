@@ -1,0 +1,15 @@
+﻿==== Processo java.exe iniciado pelo IIS ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-19 16:47:01
+Comando  : Get-CimInstance Win32_Process -Filter "Name='java.exe'" | ForEach-Object {
+        $pai = Get-CimInstance Win32_Process -Filter "ProcessId=$($_.ParentProcessId)"
+        [pscustomobject]@{ PID = $_.ProcessId; Processo = $_.Name; 'Iniciado por' = "$($pai.Name) (PID $($pai.ProcessId))"; 'Memória (MB)' = [math]::Round($_.WorkingSetSize / 1MB) }
+    } | Format-Table -AutoSize
+----------------------------------------------------------------------
+
+ PID Processo Iniciado por        Memória (MB)
+ --- -------- ------------        ------------
+6784 java.exe w3wp.exe (PID 7152)          285
+
+
+

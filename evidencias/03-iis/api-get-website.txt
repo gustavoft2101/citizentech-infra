@@ -1,0 +1,30 @@
+﻿==== Get-Website e pools (portal + API) ====
+Servidor : SRV-CITIZENTECH
+Data/hora: 2026-11-19 16:47:00
+Comando  : Get-Website | Format-Table Name, ID, State, PhysicalPath, ApplicationPool -AutoSize
+    Get-WebBinding -Name $Config.SiteApi | Format-Table protocol, bindingInformation -AutoSize
+    Get-ChildItem IIS:\AppPools | Where-Object Name -in $Config.Pool, $Config.PoolApi |
+        Format-Table Name, State, managedRuntimeVersion, startMode -AutoSize
+----------------------------------------------------------------------
+
+name             id state   physicalPath                 applicationPool     
+----             -- -----   ------------                 ---------------     
+CitizenTech       1 Started C:\inetpub\citizentech       CitizenTechPool     
+AlertaEncostaAPI  2 Started C:\inetpub\alertaencosta-api AlertaEncostaApiPool
+
+
+
+protocol bindingInformation        
+-------- ------------------        
+http     *:8080:                   
+http     *:80:api.citizentech.local
+
+
+
+name                 state   managedRuntimeVersion startMode    
+----                 -----   --------------------- ---------    
+AlertaEncostaApiPool Started                       AlwaysRunning
+CitizenTechPool      Started                       AlwaysRunning
+
+
+
