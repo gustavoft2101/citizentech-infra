@@ -526,7 +526,7 @@ Copia para `evidencias\` os logs da operação (`alertas.log`, `recursos.csv`, `
 
 ### 8.2 e 8.3 Estrutura e README
 
-Prontos neste repositório: veja a [estrutura](../README.md#7-estrutura-do-repositório), a [Ficha da CitizenTech](../README.md#1-ficha-da-citizentech), a [tabela de critérios](../README.md#5-critérios-de-avaliação-e-evidências) e a [rastreabilidade](../README.md#6-rastreabilidade). Depois de executar, preencha os campos ✏️ do README (IP real, versão do Windows, hipervisor, link do vídeo).
+Prontos neste repositório: veja a [estrutura](../README.md#7-estrutura-do-repositório), a [Ficha da CitizenTech](../README.md#1-ficha-da-citizentech), a [tabela de critérios](../README.md#5-critérios-de-avaliação-e-evidências) e a [rastreabilidade](../README.md#6-rastreabilidade). Depois de executar, preencha os campos ✏️ do README (IP real, versão do Windows, hipervisor).
 
 ---
 
