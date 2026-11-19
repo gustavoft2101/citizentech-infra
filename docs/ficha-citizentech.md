@@ -60,9 +60,11 @@ Meta do piloto: **80% dos moradores cadastrados recebem o alerta pelo menos 2 ho
 |---|---|---|
 | Servidor AlertaEncosta (Windows Server, VM) | Servidor | VM `SRV-CITIZENTECH`, IP fixo, domínio `citizentech.local` |
 | Windows Server 2022 | Software do sistema | instalação Desktop Experience |
-| IIS | Software do sistema | site `CitizenTech`, pool `CitizenTechPool` |
+| IIS | Software do sistema | sites `CitizenTech` (portal) e `AlertaEncostaAPI` (API), pools `CitizenTechPool` e `AlertaEncostaApiPool` |
+| Runtime Java | Software do sistema | JDK 21 em `C:\Java\jdk21`; o HttpPlatformHandler do IIS inicia e vigia o `java.exe` |
 | Active Directory e DNS | Software do sistema | floresta `citizentech.local`, OU `CitizenTech`, grupos e usuários, zona direta e reversa |
-| Hospedagem web (IIS) | Serviço | portal AlertaEncosta publicado em `http://alertaencosta.citizentech.local` |
+| Hospedagem web (IIS) | Serviço | portal em `http://alertaencosta.citizentech.local` e API REST (Java/Spring Boot) em `http://192.168.200.230:8080` e `http://api.citizentech.local` |
+| Persistência de dados | Serviço | banco H2 da API em `C:\inetpub\alertaencosta-api\data`, gravado só pelo pool da API |
 | Autenticação de domínio | Serviço | operadores da Defesa Civil no grupo `GG_CitizenTech_Operadores`, GPO aplicada à OU |
 | Monitoramento e recuperação de falhas | Serviço | Monitor de Desempenho com alertas, `Monitor-Recursos.ps1`, `sc.exe failure`, `Recupera-Site.ps1` |
 | Rede do domínio | Rede | DNS, compartilhamento SMB, DFS, RDP |

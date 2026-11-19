@@ -17,7 +17,7 @@ Este documento é o passo a passo usado para montar a infraestrutura. Ele segue 
 4. [Etapa 4 – Monitoramento com alertas (itens 6.1 a 6.3)](#4-etapa-4--monitoramento-com-alertas-itens-61-a-63)
 5. [Etapa 5 – Teste de falha e recuperação (itens 7.1 a 7.3)](#5-etapa-5--teste-de-falha-e-recuperação-automática-itens-71-a-73)
 6. [Etapa 6 – Validação final e evidências (itens 8.1 a 8.3)](#6-etapa-6--validação-final-e-evidências-itens-81-a-83)
-7. [Caminho B – hospedar a API da equipe em vez do site estático](#7-caminho-b--hospedar-a-api-da-equipe)
+7. [Caminho B – API AlertaEncosta (Java) no IIS](#7-caminho-b--api-alertaencosta-java-21--spring-boot-no-iis--item-43)
 8. [Erros comuns e como resolver](#8-erros-comuns-e-como-resolver)
 
 ---
@@ -187,7 +187,7 @@ A zona reversa é um extra: sem ela o `nslookup` mostra `Servidor: UnKnown`.
 
 ## 2. Etapa 2 – Aplicação no IIS (itens 4.1 a 4.5)
 
-**Caminho escolhido: A – aplicação estática.** A pasta [`app/alertaencosta-web`](../app/alertaencosta-web) é o portal público do AlertaEncosta: situação de risco por setor, rotas seguras, pontos de apoio e orientações, com dados simulados e recursos de acessibilidade (alto contraste e letra maior). Para hospedar a API da equipe, veja o [Caminho B](#7-caminho-b--hospedar-a-api-da-equipe).
+**Caminhos usados: A e B.** A pasta [`app/alertaencosta-web`](../app/alertaencosta-web) é o portal público do AlertaEncosta: situação de risco por setor, rotas seguras, pontos de apoio e orientações, com dados simulados e recursos de acessibilidade (alto contraste e letra maior). A API REST do AlertaEncosta (Java/Spring Boot) é publicada no mesmo IIS pelo [Caminho B](#7-caminho-b--api-alertaencosta-java-21--spring-boot-no-iis--item-43).
 
 **Script** (itens 4.1, 4.2 e 4.4)
 
@@ -530,38 +530,60 @@ Prontos neste repositório: veja a [estrutura](../README.md#7-estrutura-do-repos
 
 ---
 
-## 7. Caminho B – hospedar a API da equipe
+## 7. Caminho B – API AlertaEncosta (Java 21 / Spring Boot) no IIS · item 4.3
 
-Se a equipe preferir publicar a API REST do AlertaEncosta em vez do site estático, o resto da infraestrutura continua igual. Troque só a etapa 4.2:
+Além do portal (Caminho A), o servidor hospeda a **API REST do AlertaEncosta**, o backend da solução (repositório [`alertaencosta-api`](https://github.com/gustavoft2101/alertaencosta-api)). Ela roda no mesmo IIS, em um site e um pool próprios, e é vigiada pela mesma recuperação automática.
 
-1. Copie a aplicação publicada para `C:\inetpub\citizentech` (substitua o conteúdo de `app\alertaencosta-web` ou ajuste `$PastaApp` no `00-Config.ps1`).
-2. Instale o runtime e o módulo de hospedagem:
-
-| API em | Instalar | Pool |
-|---|---|---|
-| .NET / ASP.NET Core | *ASP.NET Core Hosting Bundle* e depois `iisreset` | `managedRuntimeVersion = ''` (sem código gerenciado) |
-| ASP.NET Framework 4.x | `Install-WindowsFeature Web-Asp-Net45, Web-Net-Ext45, Web-ISAPI-Ext, Web-ISAPI-Filter` | `managedRuntimeVersion = 'v4.0'` |
-| Node.js, Python ou Java | runtime da linguagem + módulo *HttpPlatformHandler* | `managedRuntimeVersion = ''` |
-
-3. Exemplo de `web.config` para Node.js com HttpPlatformHandler (em Python troque `processPath` pelo `python.exe` e `arguments` pelo script; em Java use `java.exe` e `-jar app.jar --server.port=%HTTP_PLATFORM_PORT%`):
-
-```xml
-<configuration>
-  <system.webServer>
-    <handlers>
-      <add name="httpplatformhandler" path="*" verb="*" modules="httpPlatformHandler" resourceType="Unspecified" />
-    </handlers>
-    <httpPlatform processPath="C:\Program Files\nodejs\node.exe" arguments="server.js"
-                  stdoutLogEnabled="true" stdoutLogFile=".\logs\node.log" startupTimeLimit="20">
-      <environmentVariables>
-        <environmentVariable name="PORT" value="%HTTP_PLATFORM_PORT%" />
-      </environmentVariables>
-    </httpPlatform>
-  </system.webServer>
-</configuration>
+```powershell
+# o .jar foi gerado no computador da equipe (mvn package no projeto alertaencosta-api, commit ffa835f)
+# e o instalador do JDK 21 já estava baixado; os dois foram lidos da pasta compartilhada da VM
+.\04b-IIS-API-Java.ps1 -JarPronto \\vboxsvr\Downloads\alertaencosta-api-1.0.0.jar
+Copy-Item .\Recupera-Site.ps1 C:\Scripts\ -Force   # recuperação agendada passa a vigiar também a API
 ```
 
-4. Valide com `Invoke-WebRequest http://localhost/<rota-da-api>` e `Get-WebAppPoolState CitizenTechPool`. Atualize o README: *Forma de hospedagem: Caminho B*. Se a pasta de logs do app precisar de escrita, dê `Modify` para `IIS AppPool\CitizenTechPool` nessa subpasta.
+Sem parâmetros o script baixa o JDK (Eclipse Temurin), o Maven e o código da API e faz o build na própria VM. Na nossa VM a internet ficou lenta demais para isso (~80 KB/s), por isso usamos o `.jar` gerado no computador da equipe e instalamos o JDK com o instalador já baixado (`jdk-21_windows-x64_bin.exe /s INSTALLDIR=C:\Java\jdk21`, o mesmo que o parâmetro `-InstaladorJdk` faz).
+
+O que o script faz:
+
+| Passo | Comando principal | Resultado |
+|---|---|---|
+| Módulo do IIS | `msiexec /i httpPlatformHandler_amd64.msi` + `Install-WindowsFeature Web-AppInit` | O IIS passa a iniciar e vigiar o `java.exe` e repassar as requisições para ele |
+| Runtime | JDK 21 em `C:\Java\jdk21` (instalador local ou Eclipse Temurin baixado) | `java -version` → 21.0.10 |
+| Build | `.jar` pronto (`-JarPronto`) ou download do código + `mvn -DskipTests package` | `alertaencosta-api.jar` (57,6 MB) |
+| Publicação | `C:\inetpub\alertaencosta-api\{app,data,logs}` + `web.config` | banco H2 em `data\`, saída do Java em `logs\` |
+| Pool | `AlertaEncostaApiPool`: sem código gerenciado, `AlwaysRunning`, sem desligar por inatividade | a API sobe junto com o IIS |
+| Site | `AlertaEncostaAPI`: porta **8080** e `api.citizentech.local` na porta 80 | `http://192.168.200.230:8080/swagger-ui.html` |
+| Segurança | NTFS: só o pool da API grava em `data\` e `logs\`; console do H2 desligado; firewall só 8080 | |
+| DNS | registro A `api.citizentech.local` → IP do servidor | |
+
+`web.config` gerado (resumo):
+
+```xml
+<handlers>
+  <add name="httpPlatformHandler" path="*" verb="*" modules="httpPlatformHandler" resourceType="Unspecified" />
+</handlers>
+<httpPlatform processPath="C:\Java\jdk21\bin\java.exe"
+              arguments="-Xms128m -Xmx512m -jar C:\inetpub\alertaencosta-api\app\alertaencosta-api.jar
+                         --server.port=%HTTP_PLATFORM_PORT%
+                         --spring.datasource.url=jdbc:h2:file:C:/inetpub/alertaencosta-api/data/alertaencosta
+                         --spring.h2.console.enabled=false"
+              startupTimeLimit="180" startupRetryCount="3"
+              stdoutLogEnabled="true" stdoutLogFile="C:\inetpub\alertaencosta-api\logs\java-stdout" />
+```
+
+Validação:
+
+```powershell
+Get-Website | Format-Table Name, State, PhysicalPath, ApplicationPool
+Invoke-RestMethod http://localhost:8080/api/v1/setores | Select-Object -ExpandProperty conteudo |
+    Format-Table codigo, nome, tipoRisco, nivelRiscoAtual
+```
+
+Saída esperada: sites `CitizenTech` e `AlertaEncostaAPI` em `Started` e os setores do piloto da Vila Brasilândia. No navegador de outra máquina: `http://192.168.200.230:8080/swagger-ui.html`.
+
+Prints: `03-iis/api-get-website.png`, `03-iis/api-setores.png` e `03-iis/navegador-swagger.png`.
+
+Teste de falha da API: `Stop-Process` no `java.exe` → o HttpPlatformHandler inicia outro `java.exe` na requisição seguinte e a API volta sozinha (no nosso teste, 44 s, quase todos de subida do Spring Boot com 1 vCPU). Print: `06-teste-falha/api-java-recuperado.png`.
 
 ---
 
