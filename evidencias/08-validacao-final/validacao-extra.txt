@@ -1,6 +1,6 @@
 ﻿==== Validação complementar (monitoramento, recuperação e auditoria) ====
 Servidor : SRV-CITIZENTECH
-Data/hora: 2026-11-18 12:20:55
+Data/hora: 2026-11-19 16:50:04
 Comando  : 'Aplicação pelo nome DNS:'
     Invoke-WebRequest -Uri "http://$($Config.NomeDnsApp).$($Config.Dominio)" -UseBasicParsing |
         Format-Table StatusCode, StatusDescription -AutoSize
@@ -36,11 +36,11 @@ Tarefas agendadas:
 
 TaskName                      LastRunTime         LastTaskResult NextRunTime        
 --------                      -----------         -------------- -----------        
-CitizenTech_Iniciar_Coletores 30/11/1999 00:00:00         267011                    
-CitizenTech_Monitor_Alertas   18/11/2026 12:20:20         267009 18/11/2026 12:25:25
-CitizenTech_Recuperacao       18/11/2026 12:20:20         267009 18/11/2026 12:21:21
-CitizenTech_Alertas           18/11/2026 12:04:04         267009                    
-CitizenTech_Monitor           18/11/2026 12:04:04         267009                    
+CitizenTech_Iniciar_Coletores 19/11/2026 16:29:29              0                    
+CitizenTech_Monitor_Alertas   19/11/2026 16:45:45              0 19/11/2026 16:50:50
+CitizenTech_Recuperacao       19/11/2026 16:49:49              0 19/11/2026 16:50:50
+CitizenTech_Alertas           19/11/2026 16:30:30         267009                    
+CitizenTech_Monitor           19/11/2026 16:30:30         267009                    
 
 
 Recuperação do W3SVC:
