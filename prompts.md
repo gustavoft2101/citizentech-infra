@@ -10,6 +10,7 @@ Ferramenta usada: **Claude (Anthropic)**, com acesso à tela do computador da eq
 | 2 | 17/11/2026 | "Me ajude com passo a passo para deixar tudo no jeito para a entrega" | Passo a passo de criação da VM e de execução dos scripts | Conferência com o roteiro da atividade |
 | 3 | 17 e 18/11/2026 | "Você não pode fazer tudo isso por mim? (...) só para quando precisar que eu faça algo" | Criou o repositório no GitHub, criou a VM no VirtualBox, instalou o Windows Server, executou os scripts 01 a 10 e os testes de falha na VM, tirou os prints e enviou os arquivos ao GitHub | Instalou o VirtualBox, digitou todas as senhas (Administrator, DSRM, usuários de teste), fez os logins (inclusive como `carlos.lima` para o teste da GPO), abriu o site e a pasta compartilhada no próprio computador e conectou por RDP para os prints de "outra máquina"; conferiu os prints |
 | 4 | 18/11/2026 | Correções durante a execução (sem prompt novo: problemas encontrados na VM) | Corrigiu o script 06, que apagava as permissões NTFS ao gravar a auditoria (site com erro 500.19); corrigiu o erro HTTP 406 do portal no Firefox; diagnosticou os congelamentos da VM (VirtualBox sobre Hyper-V) e reduziu para 1 vCPU | Repetiu os testes: site respondendo HTTP 200 e queda/recuperação vista no navegador |
+| 5 | 19/11/2026 | "Aqui está o link da atividade de SOA (...) está em Java", depois de perguntar se a infraestrutura deveria hospedar algo de outra disciplina | Escreveu o `04b-IIS-API-Java.ps1` (Caminho B: HttpPlatformHandler, JDK 21, site e pool da API, NTFS, firewall, DNS), incluiu a API no `Recupera-Site.ps1` e no `09`, executou na VM e tirou os prints | Gerou o `.jar` da API no IntelliJ (`mvn package`), porque a internet da VM estava lenta demais para compilar lá; conferiu o Swagger no navegador |
 
 ## Senhas e dados pessoais
 
@@ -18,7 +19,8 @@ Ferramenta usada: **Claude (Anthropic)**, com acesso à tela do computador da eq
 
 ## Pontos para saber explicar na apresentação
 
-- Por que o pool é "sem código gerenciado" (site estático, evita o erro 500.19).
+- Por que o pool é "sem código gerenciado" (site estático, evita o erro 500.19; a API Java também não usa .NET).
+- Como o HttpPlatformHandler funciona: o IIS inicia o `java.exe`, passa a porta em `%HTTP_PLATFORM_PORT%`, repassa as requisições e reinicia o Java se ele cair.
 - Diferença entre permissão de compartilhamento (SMB) e permissão NTFS (vale a mais restritiva).
 - Por que o `sc.exe failure` não age num `Stop-Service` e quem recupera nesse caso (tarefa agendada).
 - Por que usamos SIDs e GUIDs (Windows em português x inglês).
