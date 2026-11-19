@@ -180,7 +180,7 @@ Da necessidade do AlertaEncosta até a prova de que ela foi atendida.
 ```text
 citizentech-infra/
 ├── README.md                          ficha da CitizenTech, critérios e rastreabilidade
-├── prompts.md                         registro do uso de IA (regra da GS)
+├── prompts.md                         registro do uso de IA
 ├── docs/
 │   ├── roteiro-configuracao.md        passo a passo completo com comandos e saídas esperadas
 │   └── ficha-citizentech.md           ficha detalhada e papel do servidor na arquitetura
@@ -223,8 +223,4 @@ citizentech-infra/
 | RDS | Só RDP (com NLA) | O roteiro aceita RDP; instalar o Host de Sessão do RDS em um controlador de domínio não é recomendado |
 | Usuários de teste | Senha digitada na execução | Nenhuma senha no repositório |
 
----
 
-## 10. Uso de IA
-
-Seguindo o combinado da GS ("IA como copiloto"), os prompts usados estão em [prompts.md](prompts.md). Todos os scripts têm comentários linha a linha em português para que qualquer integrante consiga explicar o que cada comando faz.
