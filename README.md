@@ -180,7 +180,6 @@ Da necessidade do AlertaEncosta até a prova de que ela foi atendida.
 ```text
 citizentech-infra/
 ├── README.md                          ficha da CitizenTech, critérios e rastreabilidade
-├── prompts.md                         registro do uso de IA
 ├── docs/
 │   ├── roteiro-configuracao.md        passo a passo completo com comandos e saídas esperadas
 │   └── ficha-citizentech.md           ficha detalhada e papel do servidor na arquitetura
@@ -205,7 +204,7 @@ citizentech-infra/
 
 ## 8. Vídeo de demonstração
 
-✏️ Link: https://youtu.be/PREENCHER (até 7 minutos)
+✏️ Link: 
 
 ---
 
