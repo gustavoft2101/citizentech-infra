@@ -23,6 +23,9 @@ Como tiramos os prints: dentro da VM, `Z:\scripts\Tirar-Print.ps1 <pasta>\<arqui
 | ✅ | `03-iis/navegador-site.png` | Navegador de OUTRA máquina em `http://<IP>` com o AlertaEncosta e o rodapé "Servido por SRV-CITIZENTECH" | 4.2 | Aplicação no IIS |
 | ✅ | `03-iis/get-acl.png` | `Get-Acl` com IIS_IUSRS ReadAndExecute Allow | 4.4 | Aplicação no IIS |
 | ✅ | `03-iis/aba-seguranca.png` | Propriedades de `C:\inetpub\citizentech` > Segurança, IIS_IUSRS selecionado | 4.4 | Aplicação no IIS |
+| ✅ | `03-iis/api-get-website.png` | Sites `CitizenTech` e `AlertaEncostaAPI` Started, pools e processo `java.exe` iniciado pelo IIS (`w3wp.exe`) | 4.3 | Aplicação no IIS |
+| ✅ | `03-iis/api-setores.png` | `GET /api/v1/setores` com os setores do piloto da Vila Brasilândia | 4.3 | Aplicação no IIS |
+| ✅ | `03-iis/navegador-swagger.png` | Navegador de OUTRA máquina em `http://<IP>:8080/swagger-ui.html` com a documentação da API | 4.3 | Aplicação no IIS |
 | ✅ | `04-ntfs-gpo/get-smbshare.png` | `Get-SmbShare` com o compartilhamento CitizenTech | 4.5 | Aplicação no IIS |
 | ✅ | `04-ntfs-gpo/acesso-share-cliente.png` | Explorador de Arquivos de outra máquina em `\\<IP>\CitizenTech` | 4.5 | Aplicação no IIS |
 | ✅ | `04-ntfs-gpo/get-gpo-all.png` | `Get-GPO -All` com GPO_CitizenTech_Usuarios | 5.1 | Funcionamento completo |
@@ -41,6 +44,7 @@ Como tiramos os prints: dentro da VM, `Z:\scripts\Tirar-Print.ps1 <pasta>\<arqui
 | extra | `06-teste-falha/navegador-falha.png` | Navegador do computador da equipe durante a queda: selo vermelho "Servidor sem resposta" | 7.2 | Tolerância a falhas |
 | ✅ | `06-teste-falha/navegador-voltou.png` | Navegador carregando o site de novo após a recuperação | 7.2 | Tolerância a falhas |
 | ✅ | `06-teste-falha/recuperacao-log.png` | Conteúdo do `C:\Scripts\logs\recuperacao.log` após o teste | 7.3 | Tolerância a falhas |
+| extra | `06-teste-falha/api-java-recuperado.png` | `java.exe` da API encerrado à força e iniciado de novo pelo IIS (HttpPlatformHandler); API de volta com HTTP 200 sem intervenção | 7.2 | Tolerância a falhas |
 | ✅ | `07-logs/auditpol.png` | `auditpol /get /category:*` com Logon e Sistema de Arquivos em sucesso e falha | 5.4 | Logs e auditoria |
 | ✅ | `07-logs/eventviewer-security.png` | Visualizador de Eventos > Segurança (eventos 4624 / 4663) | 5.4 | Logs e auditoria |
 | ✅ | `07-logs/iis-logs-pasta.png` | Pasta `C:\inetpub\logs\LogFiles\W3SVC<n>` aberta | 5.4 | Logs e auditoria |
@@ -54,6 +58,7 @@ Como tiramos os prints: dentro da VM, `Z:\scripts\Tirar-Print.ps1 <pasta>\<arqui
 | `01-rede` | `versao-windows.txt`, `get-netadapter.txt`, `ip-fixo-aplicado.txt`, `ipconfig-all.txt` | 01, 03 |
 | `02-ad-dns` | `install-adds.txt`, `install-addsforest.txt`, `dns-encaminhadores.txt`, `get-addomain.txt`, `nslookup.txt`, `get-dnsserverzone.txt`, `usuarios.txt`, `grupos.txt` | 02, 03 |
 | `03-iis` | `install-iis.txt`, `get-windowsfeature-web.txt`, `arquivos-site.txt`, `get-acl.txt`, `get-website.txt`, `get-webapppoolstate.txt`, `invoke-webrequest.txt` | 04 |
+| `03-iis` | `api-runtime.txt`, `api-get-website.txt`, `api-processo.txt`, `api-invoke-webrequest.txt` | 04b |
 | `04-ntfs-gpo` | `get-smbshare.txt`, `gpo.txt`, `GPO_Report.html`, `rdp.txt`, `dfs.txt` | 05 |
 | `05-monitoramento` | `contadores.txt`, `logman-query.txt`, `get-counter.txt`, `monitor-recursos-execucao.txt`, `monitor-recursos-simulacao.txt`, `tarefas-agendadas.txt`, `eventos-alerta.txt`, `alertas.log`, `recursos.csv`, `perflogs-amostra.csv` | 07, 10 |
 | `06-teste-falha` | `pool-configuracao.txt`, `sc-qfailure.txt`, `recupera-site-execucao.txt`, `recuperacao.log`, `teste-falha-*.txt`, `eventos-servico.txt` | 08, Teste-Falha, 10 |
