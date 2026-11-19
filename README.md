@@ -216,3 +216,46 @@ citizentech-infra/
 | Usuários de teste | Senha digitada na execução | Nenhuma senha no repositório |
 
 
+---
+
+## 9. Análise de cenários de otimização
+
+Comparamos cinco formas de montar o ambiente do AlertaEncosta, com os mesmos critérios, e escolhemos a que melhor equilibra desempenho, disponibilidade e custo dentro do que a disciplina pede (Windows Server com AD, DNS, IIS, GPO, Monitor de Desempenho e auditoria).
+
+### 9.1 Os cinco cenários
+
+| # | Cenário | Como seria | Pontos fortes | Pontos fracos |
+|---|---|---|---|---|
+| 1 | **Servidor único em VM local** (Windows Server 2022 com interface) | Uma VM com AD DS, DNS, IIS, File Server/DFS e monitoramento | Menor consumo total de CPU e RAM do hospedeiro; uma só máquina para administrar e monitorar; atende todos os itens do roteiro | Ponto único de falha físico (o hospedeiro); controlador de domínio dividindo a máquina com o servidor web |
+| 2 | **Funções separadas em duas VMs** | VM 1: AD DS + DNS · VM 2: IIS + File Server | Isola o controlador de domínio da parte exposta (web); uma falha no IIS não afeta o domínio | Dobra o consumo de RAM, disco e atualizações; precisa de mais memória do que o computador da equipe tem disponível |
+| 3 | **Windows Server Core** (sem interface gráfica) | Mesmas funções do cenário 1, administradas só por PowerShell ou remotamente | Usa menos RAM e disco, tem menos componentes para atualizar e menor superfície de ataque | Sem console local para o Monitor de Desempenho, Visualizador de Eventos e Gerenciador do IIS; exige outra máquina para administrar e para gerar as evidências visuais |
+| 4 | **VM na nuvem** (Azure) | Mesmo servidor do cenário 1 hospedado no Azure | Infraestrutura do provedor, acesso de qualquer lugar e facilidade para crescer | Custo recorrente por hora de uso; depende de conta e créditos; o ambiente de laboratório local já atende a proposta |
+| 5 | **Linux** (ex.: Ubuntu Server com Nginx e Samba) | Servidor web e diretório em Linux | Sistema leve e sem licença | Não tem IIS, GPO nem Monitor de Desempenho; não atende o roteiro, que é de Windows Server |
+
+### 9.2 Comparação
+
+Notas de 1 (fraco) a 3 (bom), na avaliação da equipe:
+
+| Critério | 1. Único (GUI) | 2. Duas VMs | 3. Server Core | 4. Azure | 5. Linux |
+|---|:-:|:-:|:-:|:-:|:-:|
+| Uso de CPU e memória do hospedeiro | 3 | 1 | 3 | 3 | 3 |
+| Disponibilidade e tolerância a falhas | 2 | 3 | 2 | 3 | 2 |
+| Segurança (isolamento e superfície de ataque) | 2 | 3 | 3 | 2 | 2 |
+| Facilidade de administrar e gerar evidências | 3 | 2 | 1 | 2 | 1 |
+| Custo para a equipe | 3 | 2 | 3 | 1 | 3 |
+| Atende o roteiro da disciplina | 3 | 3 | 2 | 3 | 1 |
+| **Total** | **16** | **14** | **14** | **14** | **12** |
+
+### 9.3 Solução escolhida
+
+**Cenário 1: servidor único Windows Server 2022 em VM local.** É o que melhor usa os recursos disponíveis (a VM roda com 1 vCPU e 4 GB de RAM), atende todos os itens do roteiro e permite mostrar cada configuração na própria interface do Windows. Os pontos fracos do cenário foram compensados com otimizações no próprio sistema operacional:
+
+| Ponto fraco do cenário 1 | Otimização aplicada |
+|---|---|
+| Um problema na aplicação poderia afetar o resto do servidor | Portal e API em **pools de aplicativos separados**, sem código gerenciado (.NET desligado, menos memória por processo) |
+| Serviço web parado deixaria o AlertaEncosta fora do ar | Recuperação em camadas: `rapidFailProtection` desligado, pools `AlwaysRunning`, `sc.exe failure` no W3SVC e WAS e tarefa `CitizenTech_Recuperacao` a cada minuto (ver [seção 3](#3-arquitetura)) |
+| Recursos limitados da VM | Coleta no Monitor de Desempenho a cada 15 s e **alertas por limiar** de CPU (> 80%), memória livre (< 500 MB) e disco livre (< 15%), com registro no Visualizador de Eventos |
+| Serviços desnecessários consomem recursos e aumentam a superfície de ataque | Site padrão do IIS removido, RDS não instalado (só RDP com NLA), apenas as funções necessárias instaladas |
+| Controlador de domínio na mesma máquina do site | Pasta do site só com leitura para o IIS (NTFS), GPO restringindo os operadores e auditoria de logon e de acesso a arquivos |
+
+**Evolução para produção:** com mais recursos, o próximo passo seria o cenário 2 (controlador de domínio separado do servidor web) e, para a época de chuvas, o cenário 4 com uma segunda instância, eliminando o hospedeiro como ponto único de falha. O Server Core (cenário 3) também é uma opção para o servidor web, já que a configuração deste repositório é feita por scripts PowerShell.
